@@ -12,6 +12,10 @@ class Transaction extends Model
     }
     public function location()
     {
-        return $this->hasMany(location::class);
+        return $this->belongsTo(location::class);
+    }
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
     }
 }

@@ -8,6 +8,6 @@ class location extends Model
 {
     public function transaction()
     {
-        $this->belongsTo(Transaction::class);
+        $this->hasOne(Transaction::class);
     }
 }

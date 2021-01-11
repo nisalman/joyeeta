@@ -32,7 +32,7 @@ class DisbursementController extends Controller
 
        $storeList = Store::select('id','name')
             ->get();
-        return view('disbursement.create', compact('storeList','distursements'));
+        return view('disbursement.create', compact('storeList',));
     }
 
     /**

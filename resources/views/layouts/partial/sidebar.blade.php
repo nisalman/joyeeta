@@ -4,7 +4,7 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
             <li>
-                <a href="index.html">
+                <a href="{{route('admin.home')}}">
                     <i class="fa fa-dashboard"></i>
                     <span>Dashboard</span>
                 </a>
@@ -17,7 +17,7 @@
                 </a>
                 <ul class="sub">
                     <li><a  href="{{route('location.create')}}">Create</a></li>
-                    <li><a  href="location">All store</a></li>
+                    <li><a  href="{{route('location.index')}}">All store</a></li>
                 </ul>
             </li>
             <li class="sub-menu">
@@ -27,7 +27,7 @@
                 </a>
                 <ul class="sub">
                     <li><a  href="{{route('store.create')}}">Create</a></li>
-                    <li><a  href="store">All store</a></li>
+                    <li><a  href="{{route('store.index')}}">All store</a></li>
                 </ul>
             </li>
             <li class=" sub-menu">
@@ -37,7 +37,7 @@
                 </a>
                 <ul class="sub">
                     <li><a  href="{{route('transaction.create')}}">Create</a></li>
-                    <li><a  href="transaction">All Transaction</a></li>
+                    <li><a  href="{{route('transaction.index')}}">All Transaction</a></li>
                 </ul>
             </li>
             <li class=" sub-menu">
@@ -47,7 +47,7 @@
                 </a>
                 <ul class="sub">
                     <li><a  href="{{route('disbursement.create')}}">Create</a></li>
-                    <li><a  href="disbursement">Disbursement History</a></li>
+                    <li><a  href="{{route('disbursement.index')}}">Disbursement History</a></li>
                 </ul>
             </li>
 

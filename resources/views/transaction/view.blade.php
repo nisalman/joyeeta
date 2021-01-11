@@ -22,6 +22,7 @@
                                     <th>Discount</th>
                                     <th class="hidden-phone">Coupon</th>
                                     <th class="hidden-phone">Final Payable</th>
+                                    <th>Date</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -29,12 +30,17 @@
                                 @foreach($transactions as $transaction)
                                 <tr class="gradeX">
                                     <td>{{$transaction->name}}</td>
-                                    <td>Internet
-                                        Explorer 4.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td class="center hidden-phone">4</td>
-                                    <td class="center hidden-phone">X</td>
+                                    <td>{{$transaction->store->name}}</td>
+                                    <td>{{$transaction->location->name}}</td>
+                                    <td>{{$transaction->customer->name}}</td>
+                                    <td>{{$transaction->net_amount}}</td>
+                                    <td>{{$transaction->discount}}</td>
+                                    <td>{{$transaction->coupon}}</td>
+                                    <td class="center hidden-phone">{{$transaction->final_payable}}</td>
+                                    <td>
+
+                                            {{$transaction->created_at}};
+
                                     <td>
                                         <button class="btn btn-success btn-sm"><i class="fa fa-check"></i></button>
                                         <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
