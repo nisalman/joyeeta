@@ -10,5 +10,9 @@ class Store extends Model
     {
         return $this->hasMany(Disbursement::class);
     }
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 
 }

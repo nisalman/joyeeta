@@ -10,4 +10,8 @@ class Transaction extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+    public function location()
+    {
+        return $this->hasMany(location::class);
+    }
 }
