@@ -10,4 +10,5 @@ class Store extends Model
     {
         return $this->hasMany(Disbursement::class);
     }
+
 }
