@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\location;
 use App\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
 {
@@ -16,7 +17,8 @@ class StoreController extends Controller
     public function index()
     {
         $stores= Store::all();
-        return view('store.view', compact('stores'));
+        $userId= Store::find(1);
+        return view('store.view', compact('stores','userId'));
     }
 
     /**
@@ -26,7 +28,15 @@ class StoreController extends Controller
      */
     public function create()
     {
-        return view('store.create');
+        $locationData = location::where('admin_id',userType())
+            ->first();
+
+        $allLocations= location::all();
+        /*return Store::find(1)->location;
+        return Store::find($locationData->id);*/
+
+
+        return view('store.create', compact('locationData','allLocations'));
     }
 
     /**
@@ -37,7 +47,7 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request;
+        return $request;
         $Store = new Store();
         $Store->name = $request->storeName;
         $Store->number = $request->storeNumber;

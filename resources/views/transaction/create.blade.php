@@ -12,36 +12,51 @@
                         <div class="card-body">
                             {!! Form::open(['route' => 'transaction.store'], ['method'=>'post']) !!}
 
-                            <div class="form-group row">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label">Store Name</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="storeName" placeholder="Email">
-                                </div>
-                            </div>
+                            @can('isSuperAdmin')
+
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
                                 <div class="col-sm-9">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon3">DM</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="storeLocation" id="basic-url"
-                                               aria-describedby="basic-addon3">
+                                    <select class="form-control form-control-sm mb-2" name="storeLocation">
+                                        <option> Select Location</option>
+                                        @foreach($allLocation as $location)
+                                            <option value="{{$location->id}}"> {{$location->name}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-sm-3 col-form-label">Store</label>
+                                <div class="col-sm-9">
+                                    <select name="state" class="form-control">
+                                        <option>--Select Store--</option>
+                                    </select>
+                                </div>
+                            </div>
+                                @endcan
+                            @cannot('isSuperAdmin')
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control form-control-sm mb-2" name="storeLocation">
+                                            <option> Select Location</option>
+                                            @foreach($shopData as $shop)
+                                                <option value="{{$shop->id}}"> {{$shop->name}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endcannot
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-sm-3 col-form-label">Customer
+                                    Number</label>
+                                <div class="col-sm-9">
+
+                                    <input type="number" name="country_name" id="country_name" class="form-control"/>
+                                    <div id="countryList">
                                     </div>
                                 </div>
                             </div>
-
-                                <div class="form-group row">
-                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Customer
-                                        Number</label>
-                                    <div class="col-sm-9">
-
-                                            <input type="text" name="country_name" id="country_name" class="form-control"
-                                                   placeholder="Enter Number"/>
-                                            <div id="countryList">
-                                            </div>
-                                    </div>
-                                </div>
 
 
                             <div class="form-group row">
@@ -93,8 +108,11 @@
 
 
                         <div class="form-group row">
-                            <div class="col-sm-10">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-info">Save</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="submit" value="pr" name="pr" class="btn btn-success">Print and Save</button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -108,17 +126,16 @@
 @endsection
 <script src="{{asset('admin/js/jquery.js')}}"></script>
 <script>
-    $(document).ready(function(){
-        $('#country_name').keyup(function(){
+    $(document).ready(function () {
+        $('#country_name').keyup(function () {
             var query = $(this).val();
-            if(query != '')
-            {
+            if (query != '') {
                 var _token = $('input[name="_token"]').val();
                 $.ajax({
-                    url:"{{ route('autocomplete') }}",
-                    method:"GET",
-                    data:{query:query, _token:_token},
-                    success:function(data){
+                    url: "{{ route('autocomplete') }}",
+                    method: "GET",
+                    data: {query: query, _token: _token},
+                    success: function (data) {
                         $('#countryList').fadeIn();
                         $('#countryList').html(data);
                     }
@@ -126,7 +143,7 @@
             }
         });
 
-        $(document).on('click', 'li', function(){
+        $(document).on('click', 'li', function () {
             $('#country_name').val($(this).text());
             $('#countryList').fadeOut();
 
@@ -158,14 +175,41 @@
             });
 
 
-
         });
 
     });
 </script>
 
+<script type="text/javascript">
+    jQuery(document).ready(function ()
+    {
+        jQuery('select[name="storeLocation"]').on('change',function(){
+            var countryID = jQuery(this).val();
+            if(countryID)
+            {
+                jQuery.ajax({
+                    url : 'getStores/' +countryID,
+                    type : "GET",
+                    dataType : "json",
+                    success:function(data)
+                    {
+                        console.log(data);
+                        jQuery('select[name="state"]').empty();
+                        jQuery.each(data, function(key,value){
+                            $('select[name="state"]').append('<option value="'+ key +'">'+ value +'</option>');
+                        });
+                    }
+                });
+            }
+            else
+            {
+                $('select[name="state"]').empty();
+            }
+        });
+    });
+</script>
 
-<{{--select class=" js-example-basic-multiple itemName" multiple="multiple" style="width:500px;" name="itemName"></select>
+{{--select class=" js-example-basic-multiple itemName" multiple="multiple" style="width:500px;" name="itemName"></select>
 
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

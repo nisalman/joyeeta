@@ -64,6 +64,10 @@ li.L8 {
 }
 /* Alternate shading for lines */
 @media print {
+
+    #printBut{
+        display: none;
+    }
   pre .str {
     color: #060;
   }

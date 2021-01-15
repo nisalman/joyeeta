@@ -15,13 +15,16 @@
                                 <thead>
                                 <tr>
                                     <th>Store Name</th>
-                                    <th>Payment Amount</th>
+                                    <th>Paid Amount</th>
                                     <th>Payment Detail</th>
                                     <th>Net Payable</th>
                                     <th>Discount</th>
-                                    <th class="hidden-phone">Create Date</th>
-                                    <th class="hidden-phone">Status</th>
+                                    <th class="hidden-phone">From</th>
+                                    <th class="hidden-phone">To</th>
+{{--                                    <th class="hidden-phone">Disbursement</th>--}}
+                                    @can('isSuperAdmin')
                                     <th>Action</th>
+                                    @endcan
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -33,19 +36,26 @@
                                         <td>{{$disbursement->payment_detail}}</td>
                                         <td>{{$disbursement->net_payable}}</td>
                                         <td>{{$disbursement->discount}}</td>
-                                        <td class="center hidden-phone">{{$disbursement->created_at}}</td>
                                         <td class="center hidden-phone">
+                                            {{ Carbon\Carbon::parse($disbursement->from)->format('d/m/Y') }}
+                                        </td>
+                                        <td class="center hidden-phone">
+                                            {{ Carbon\Carbon::parse($disbursement->to)->format('d/m/Y') }}
+                                        </td>
+                                        {{--<td class="center hidden-phone">
                                             @if($disbursement->is_disbursement==1)
                                                 <span class="badge badge-success label-mini">Yes</span>
                                             @else
                                                 <span class="badge badge-danger label-mini">No</span>
                                             @endif
-                                        </td>
+                                        </td>--}}
+                                        @can('isSuperAdmin')
                                         <td>
                                             <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-check"></i></button>
                                             <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
                                             <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>
                                         </td>
+                                        @endcan
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -15,8 +15,16 @@ class UserController extends Controller
      */
     public function index()
     {
+        if (Gate::allows('isSuperAdmin'))
+        {
         $users=User::all();
         return view('user.view', compact('users'));
+        }
+        else
+        {
+            return 'You are not allowed';
+        }
+
     }
 
     /**
@@ -27,7 +35,7 @@ class UserController extends Controller
     public function create()
     {
 
-        if (Gate::allows('isAdmin'))
+        if (Gate::allows('isSuperAdmin'))
         {
             return view('user.create');
         }

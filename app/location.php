@@ -10,4 +10,16 @@ class location extends Model
     {
         $this->hasOne(Transaction::class);
     }
+    public function admin()
+    {
+        return $this->belongsTo(User::class,'admin_id');
+    }
+    public function operator()
+    {
+        return $this->belongsTo(User::class,'operator_id');
+    }
+    public function store()
+    {
+        return $this->hasMany(Store::class);
+    }
 }

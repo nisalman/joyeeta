@@ -8,7 +8,6 @@
                     <header class="card-header">
                         Advanced Table
                     </header>
-
                     <div class="card-body">
                         <div class="adv-table">
                             <table class="display table table-bordered table-striped" id="dynamic-table">
@@ -32,10 +31,8 @@
                                         <td>{{$location->contact_person}}</td>
                                         <td>{{$location->contact_number}}</td>
                                         <td>{{$location->address}}</td>
-                                        <td>{{$location->location_admin_id}}</td>
-                                        <td>{{$location->operator_id}}</td>
-
-
+                                        <td>{{$location->admin->name}}</td>
+                                        <td>{{$location->operator->name}}</td>
                                         <td>
                                             <button class="btn btn-success btn-sm"><i class="fa fa-check"></i></button>
                                             <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
@@ -49,5 +46,6 @@
                         </div>
                     </div>
                 </section>
+
 @endsection
 

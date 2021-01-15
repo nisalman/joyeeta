@@ -11,39 +11,50 @@
                     <div class="col-lg-8">
                         <div class="card-body">
                             {!! Form::open(['route' => 'store.store'], ['method'=>'post']) !!}
-                            @can('isSuperAdmin')
+
                             <div class="form-group row">
-                                <label for="inputEmail3" class="col-sm-3 col-form-label">Store Name</label>
+                                <label for="inputEmail3" class="col-sm-3 col-form-label">Stores Name</label>
                                 <div class="col-sm-9">
                                     <input type="text" name="storeName" class="form-control" id="inputEmail3">
                                 </div>
                             </div>
-
-                            <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Store Number</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" name="storeNumber"
-                                               aria-describedby="basic-addon3">
+                            @can('isSuperAdmin')
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Stores Location</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control form-control-sm mb-2" name="locationAdmin">
+                                            <option> Select</option>
+                                            @foreach($allLocations as $location)
+                                                <option value="{{$location->id}}"> {{$location->name}} </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Store Number</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" name="storeNumber"
+                                                   aria-describedby="basic-addon3">
+                                        </div>
+                                    </div>
+                                </div>
                             @endcan
-                            @cannot('isSuperAdmin')
+                        @can('isAdmin')
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">Store Number</label>
                                 <div class="col-sm-9">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon3">DM</span>
+                                            <span class="input-group-text"
+                                                  id="basic-addon3">{{$locationData->prefix}}</span>
                                         </div>
                                         <input type="text" name="storeNumber" class="form-control"
                                                aria-describedby="basic-addon3">
                                     </div>
                                 </div>
                             </div>
-                            @endcannot
+                            @endcan
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">Contact Name</label>
                                 <div class="col-sm-9">

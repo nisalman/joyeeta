@@ -4,7 +4,7 @@
         <i class="fa fa-bars"></i>
     </div>
     <!--logo start-->
-    <a href="index.html" class="logo">Flat<span>lab</span></a>
+    <a href="index.html" class="logo">Joyeeta<span>POS</span></a>
     <!--logo end-->
     <div class="nav notify-row" id="top_menu">
         <!--  notification start -->

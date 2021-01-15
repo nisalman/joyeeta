@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Disbursement;
 use App\location;
 use App\Store;
+use App\Transaction;
 use Illuminate\Http\Request;
-
+use DB;
+use Carbon\Carbon;
 class DisbursementController extends Controller
 {
     /**
@@ -29,10 +31,12 @@ class DisbursementController extends Controller
      */
     public function create()
     {
-
+        $locationData = location::where('admin_id',userType())
+            ->first();
+        $allLocation=location::all();
        $storeList = Store::select('id','name')
             ->get();
-        return view('disbursement.create', compact('storeList',));
+        return view('disbursement.create', compact('storeList','locationData','allLocation'));
     }
 
     /**
@@ -43,16 +47,57 @@ class DisbursementController extends Controller
      */
     public function store(Request $request)
     {
-        $Disbursement = new Disbursement();
-        $Disbursement->store_id = $request->storeId;
-        $Disbursement->commission_amount = $request->commission;
-        $Disbursement->is_disbursement = $request->isDisvursed;
-        $Disbursement->payment_amount = $request->paymentAmount;
-        $Disbursement->payment_detail = $request->paymentDetails;
-        $Disbursement->net_payable = $request->netPayable;
-        $Disbursement->discount = $request->discount;
+       // return $request;
+        $storePrefix = Store::find($request->storeId)->location->prefix;
+        $disburseID = $storePrefix.'-'.mt_rand(100000, 999999);
 
-        $Disbursement->save();
+
+         $transactionQuery = Transaction::where('store_id', $request->storeId)
+                                        ->whereBetween('created_at',[$request->from.'%', $request->to.'%'])
+                                        ->where('is_disburse', 0);
+        if ($transactionQuery==NULL)
+        {
+            return 'null';
+        }
+
+        $totalAmountBetweenDate = $transactionQuery->sum('final_payable');
+        $allTrans = $transactionQuery->select('created_at')->get();
+
+        foreach ($allTrans as $allTran)
+        {
+            Transaction::where('created_at', $allTran->created_at)
+                ->update(['is_disburse' => 1]);
+        }
+
+        //return Store::where('id', $request->storeId);
+        $storeBalance = Store::find($request->storeId)->balance;
+
+       if ($storeBalance > $totalAmountBetweenDate)
+       {
+           $balanceAfterDisburse = $storeBalance-$totalAmountBetweenDate;
+          // return $totalAmountBetweenDate;
+           Store::where('id',$request->storeId)
+               ->update(['balance'=> $balanceAfterDisburse]);
+
+           $Disbursement = new Disbursement();
+           $Disbursement->store_id = $request->storeId;
+           $Disbursement->disburse_id = $disburseID;
+           $Disbursement->commission_amount = $request->commission;
+           $Disbursement->is_disbursement = $request->isDisvursed;
+           $Disbursement->payment_amount = $request->paymentAmount;
+           $Disbursement->payment_detail = $request->paymentDetails;
+           $Disbursement->net_payable = $totalAmountBetweenDate;
+           $Disbursement->discount = $request->discount;
+           $Disbursement->from = $request->from;
+           $Disbursement->to = $request->to;
+           //return $Disbursement;
+           $Disbursement->save();
+
+       }
+       else{
+           return 'You dont get more than your earning';
+       }
+
     }
 
     /**
@@ -99,4 +144,5 @@ class DisbursementController extends Controller
     {
         //
     }
+
 }

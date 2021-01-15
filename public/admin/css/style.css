@@ -410,7 +410,7 @@ ul.sidebar-menu li a.active i {
 }
 
 a.logo {
-    font-size: 21px;
+    font-size: 18px;
     color: #2e2e2e;
     float: left;
     margin-top: 15px;
@@ -4986,7 +4986,7 @@ tr.odd.gradeX td.sorting_1, tr.even.gradeX td.sorting_1, table.display tr.even.g
     padding-bottom: 20px ;
     padding-left: 210px;
 
-    position: absolute;
+    /*position: absolute;*/
     bottom: 0;
     right: 0;
     left: 0;
