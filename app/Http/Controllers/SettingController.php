@@ -14,7 +14,8 @@ class SettingController extends Controller
      */
     public function index()
     {
-        //
+        $settings=Setting::find(1)->first();
+        return view('setting.view', compact('settings'));
     }
 
     /**
@@ -35,7 +36,7 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //return $request;
     }
 
     /**
@@ -67,9 +68,14 @@ class SettingController extends Controller
      * @param  \App\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request, $id)
     {
-        //
+        $Setting= Setting::find($id);
+        $Setting->vat = $request->vat;
+        $Setting->tax = $request->tax;
+        $Setting->commission = $request->commission;
+        $Setting->save();
+        return redirect()->back();
     }
 
     /**

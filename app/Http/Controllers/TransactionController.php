@@ -49,15 +49,11 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->pr)
-        {
-            return $this->print($request);
-        }
 
         //$request->storeLocation;
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
         $transactionID = $storePrefix.'-'.mt_rand(100000, 999999);
-        ;
+
 
 
         $getCustomerInfo = Customer::where('mobile', $request->country_name)
@@ -71,7 +67,7 @@ class TransactionController extends Controller
             $Customer->save();
 
             $Transaction = new Transaction();
-            $Transaction->name = $request->storeName;
+            //$Transaction->name = $request->storeName;
             $Transaction->transactionID = $transactionID;
             $Transaction->store_id = $request->storeNumber;
             $Transaction->location_id = $request->contactName;
@@ -83,6 +79,7 @@ class TransactionController extends Controller
 
             $Transaction->save();
 
+
         } else {
 
             $customerId = Customer::where('mobile', $request->country_name)
@@ -90,7 +87,7 @@ class TransactionController extends Controller
                 ->first();
 
             $Transaction = new Transaction();
-            $Transaction->name = $request->storeName;
+            //$Transaction->name = $request->storeName;
             $Transaction->store_id = $request->storeNumber;
             $Transaction->location_id = $request->contactName;
             $Transaction->customer_id = $customerId->id;
@@ -100,6 +97,11 @@ class TransactionController extends Controller
             $Transaction->final_payable = $request->finalPayable;
             $Transaction->save();
 
+        }
+
+        if ($request->pr)
+        {
+            return $this->print($request);
         }
 
 

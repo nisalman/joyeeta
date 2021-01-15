@@ -62,6 +62,16 @@
                         <li><a  href="{{route('user.index')}}">All User</a></li>
                     </ul>
                 </li>
+                <li class=" sub-menu">
+                    <a href="javascript:;" class=" {{ Request::is('admin/setting*') ? 'active': '' }}">
+                        <i class="fa fa-chain"></i>
+
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a  href="{{route('setting.index')}}">Setup Settings</a></li>
+                    </ul>
+                </li>
 
 
 

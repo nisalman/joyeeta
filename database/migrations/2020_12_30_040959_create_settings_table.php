@@ -15,6 +15,9 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->integer('vat');
+            $table->integer('tax');
+            $table->integer('commission');
             $table->timestamps();
         });
     }

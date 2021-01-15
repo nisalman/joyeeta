@@ -13,7 +13,7 @@
                                     <img src="{{asset('admin/img/Joyeeta.png')}}" height="55px" width="110px" alt="">
                                 </div>
                                 <div class="col-lg-4 col-sm-4">
-                                    <h4>BILLING From</h4>
+                                    <h4>Billing From</h4>
                                     <p>
                                         {{$trans->customerName}} <br>
                                         Concord  Royal Court (6th Floor), <br>
