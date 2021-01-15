@@ -13,6 +13,7 @@ Use Illuminate\Support\Facades\Auth;
 |
 */
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+Route::get('toast', 'TestController@toast');
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -40,6 +41,9 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::get('transaction/getStores/{id}','TransactionController@getStorebyLocation');
     Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
 
+
+    Route::get('add-to-log', 'HomeController@myTestAddToLog');
+    Route::get('logActivity', 'HomeController@logActivity');
 
     Route::get('print',function () {
         return view('print');

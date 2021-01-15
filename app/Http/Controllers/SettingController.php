@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Setting;
+use Flasher\Prime\FlasherInterface;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller
@@ -14,6 +15,8 @@ class SettingController extends Controller
      */
     public function index()
     {
+        \LogActivity::addToLog('Setting Clicked');
+
         $settings=Setting::find(1)->first();
         return view('setting.view', compact('settings'));
     }
@@ -68,13 +71,16 @@ class SettingController extends Controller
      * @param  \App\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, FlasherInterface $flasher)
     {
+        \LogActivity::addToLog('Setting Update');
+
         $Setting= Setting::find($id);
         $Setting->vat = $request->vat;
         $Setting->tax = $request->tax;
         $Setting->commission = $request->commission;
         $Setting->save();
+        $flasher->addSuccess('Setting successfully updated');
         return redirect()->back();
     }
 

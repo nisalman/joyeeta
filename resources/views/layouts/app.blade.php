@@ -33,6 +33,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/bootstrap-daterangepicker/daterangepicker-bs3.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
     <!--right slidebar-->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
     <link href="{{ asset('admin/css/slidebars.css')}}" rel="stylesheet">
 
 
@@ -78,6 +80,7 @@
     <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
 --}}
         </head>
+
         <body class=" light-sidebar-nav">
 
     <section id="container">
@@ -99,6 +102,7 @@
 
     <script src="{{asset('admin/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('admin/assets/jquery-multi-select/js/jquery.multi-select.js')}}" type="text/javascript" ></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
 
     <script class="include" type="text/javascript" src="{{asset('admin/js/jquery.dcjqaccordion.2.7.js')}}"></script>
     <script src="{{asset('admin/assets/typehead/bootstrap3-typeahead.min.js')}}"></script>
@@ -161,7 +165,6 @@
         });
 
     </script>
-
     </body>
 
 </html>

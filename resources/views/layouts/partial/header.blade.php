@@ -218,6 +218,8 @@
         <!--  notification end -->
     </div>
     <div class="top-nav ">
+        @flasher_render
+
         <!--search & user info start-->
         <ul class="nav pull-right top-menu">
             <li>
