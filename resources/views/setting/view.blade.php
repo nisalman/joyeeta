@@ -8,6 +8,7 @@
                     <header class="card-header">
                         Settings
                     </header>
+                    @include('layouts.partial.validationMessage')
                     <div class="card-body">
                         {!! Form::open(['route' => ['setting.update', $settings->id]]) !!}
                         {{ method_field('PUT') }}

@@ -23,8 +23,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::get('dashboard', 'HomeController@superAdminHome')->name('admin.home');
-    /*Route::get('regular', 'HomeController@localAdminHome')->name('localadmin.home');
-    Route::get('operator', 'HomeController@operatorHome')->name('operator.home');*/
     Route::resource('store','StoreController');
     Route::resource('customer','CustomerController');
     Route::resource('transaction','TransactionController');
@@ -43,7 +41,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
 
 
     Route::get('add-to-log', 'HomeController@myTestAddToLog');
-    Route::get('logActivity', 'HomeController@logActivity');
+    Route::get('logActivity', 'HomeController@logActivity')->name('logActivity');
 
     Route::get('print',function () {
         return view('print');

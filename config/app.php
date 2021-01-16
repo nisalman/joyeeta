@@ -174,8 +174,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        Yoeunes\Toastr\ToastrServiceProvider::class
+        Brian2694\Toastr\ToastrServiceProvider::class,
 
 
     ],
@@ -230,7 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'LogActivity' => App\Helpers\LogActivity::class,
-
+        'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
 
 
 

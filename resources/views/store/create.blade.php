@@ -9,6 +9,7 @@
                         Horizontal Forms
                     </header>
                     <div class="col-lg-8">
+                        @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             {!! Form::open(['route' => 'store.store'], ['method'=>'post']) !!}
 

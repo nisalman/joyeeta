@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFormRequest;
 use App\location;
 use App\Store;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class StoreController extends Controller
      */
     public function index()
     {
+        \LogActivity::addToLog('Store Viewed');
         $stores= Store::all();
         $userId= Store::find(1);
         return view('store.view', compact('stores','userId'));
@@ -28,6 +30,9 @@ class StoreController extends Controller
      */
     public function create()
     {
+        \LogActivity::addToLog('Store Create clicked');
+
+
         $locationData = location::where('admin_id',userType())
             ->first();
 
@@ -45,9 +50,9 @@ class StoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreFormRequest $request)
     {
-        return $request;
+        //return $request;
         $Store = new Store();
         $Store->name = $request->storeName;
         $Store->number = $request->storeNumber;
@@ -59,6 +64,8 @@ class StoreController extends Controller
         $Store->payment_details = $request->paymentDetails;
 
         $Store->save();
+        \LogActivity::addToLog(' New Store created');
+        return redirect()->back()->with('successMsg','Store Successfully created');
     }
 
     /**

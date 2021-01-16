@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Http\Requests\TransactionFormRequest;
 use App\location;
 use App\Store;
 use App\Transaction;
@@ -19,6 +20,8 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        \LogActivity::addToLog('Transaction Viewed');
+
         $transactions = Transaction::all();
         return view('transaction.view', compact('transactions'));
     }
@@ -30,6 +33,8 @@ class TransactionController extends Controller
      */
     public function create()
     {
+        \LogActivity::addToLog('Transaction Create Clicked');
+
         $locationData = location::where('admin_id', userType())->first();
         $shopData = Store::where('location_id', $locationData->id)->get();
         $allLocation = location::all();
@@ -47,13 +52,12 @@ class TransactionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TransactionFormRequest $request)
     {
 
-        //$request->storeLocation;
+        //return $request->storeLocation;
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
         $transactionID = $storePrefix.'-'.mt_rand(100000, 999999);
-
 
 
         $getCustomerInfo = Customer::where('mobile', $request->country_name)
@@ -78,6 +82,8 @@ class TransactionController extends Controller
             $Transaction->final_payable = $request->finalPayable;
 
             $Transaction->save();
+            \LogActivity::addToLog('Transaction created');
+            return redirect()->back()->with('successMsg','Transaction Successfully created');
 
 
         } else {
@@ -87,7 +93,6 @@ class TransactionController extends Controller
                 ->first();
 
             $Transaction = new Transaction();
-            //$Transaction->name = $request->storeName;
             $Transaction->store_id = $request->storeNumber;
             $Transaction->location_id = $request->contactName;
             $Transaction->customer_id = $customerId->id;
@@ -186,4 +191,5 @@ class TransactionController extends Controller
           $trans=$request;
          return view('print',compact('trans'));
     }
+
 }

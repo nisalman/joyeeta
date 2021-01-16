@@ -8,10 +8,11 @@
                     <header class="card-header">
                         Create User
                     </header>
+
                     <div class="col-lg-8">
+                        @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             {!! Form::open(['route' => 'user.store'], ['method'=>'post']) !!}
-
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-3 col-form-label">Name</label>
                                 <div class="col-sm-9">
@@ -51,6 +52,7 @@
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">User Type</label>
                                 <div class="col-sm-9">
                                     <select class="form-control form-control-sm mb-2" name="userType">
+                                        <option> Select User Type</option>
                                         <option value="1">Admin</option>
                                         <option value="2">Operator</option>
                                     </select>

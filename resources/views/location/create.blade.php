@@ -1,5 +1,6 @@
 @extends('layouts.app')
-
+@push('css')
+@endpush
 @section('content')
 
     <section class="wrapper">
@@ -10,6 +11,7 @@
                         Location Setup
                     </header>
                     <div class="col-lg-8">
+                        @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             {!! Form::open(['route' => 'location.store'], ['method'=>'post']) !!}
 
@@ -92,4 +94,6 @@
 
 @endsection
 
+@push('scripts')
 
+@endpush

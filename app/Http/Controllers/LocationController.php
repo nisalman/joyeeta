@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Http\Requests\LocationFormRequest;
 use App\location;
 use App\User;
+use Yoeunes\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
@@ -16,6 +18,8 @@ class LocationController extends Controller
      */
     public function index()
     {
+        \LogActivity::addToLog('Location Viewed');
+
         $locations=location::all();
         return view('location.view',compact('locations'));
     }
@@ -27,12 +31,17 @@ class LocationController extends Controller
      */
     public function create()
     {
+        \LogActivity::addToLog('Location create clicked');
+
        $getAdmins= User::where('user_role_id','2')
            ->select('id','name')
             ->get();
         $getOperators= User::where('user_role_id','3')
             ->select('id','name')
             ->get();
+
+        \LogActivity::addToLog('Location Creation clicked ');
+
         return view('location.create', compact('getAdmins','getOperators'));
     }
 
@@ -42,22 +51,22 @@ class LocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LocationFormRequest $request)
     {
-        //return $request;
-//        $this->validate($request,[
-//            'name' => 'required'
-//        ]);
+
         $Location = new Location();
         $Location->name = $request->store_name;
-        $Location->slug = $request->slug;
+        $Location->prefix = $request->slug;
         $Location->contact_person = $request->contactPerson;
         $Location->contact_number = $request->contactNumber;
         $Location->address = $request->address;
-        $Location->location_admin_id = $request->locationAdmin;
+        $Location->admin_id = $request->locationAdmin;
         $Location->operator_id = $request->locationOperator;
 
         $Location->save();
+        \LogActivity::addToLog(' New Location Stored');
+        return redirect()->back()->with('successMsg','User Successfully Saved');
+
 
     }
 

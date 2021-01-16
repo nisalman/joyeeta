@@ -71,6 +71,9 @@
                     <ul class="sub">
                         <li><a  href="{{route('setting.index')}}">Setup Settings</a></li>
                     </ul>
+                    <ul class="sub">
+                        <li><a  href="{{route('logActivity')}}">Activity Log</a></li>
+                    </ul>
                 </li>
 
 

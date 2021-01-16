@@ -9,31 +9,32 @@
                         Transaction
                     </header>
                     <div class="col-lg-8">
+                        @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             {!! Form::open(['route' => 'transaction.store'], ['method'=>'post']) !!}
 
                             @can('isSuperAdmin')
 
-                            <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control form-control-sm mb-2" name="storeLocation">
-                                        <option> Select Location</option>
-                                        @foreach($allLocation as $location)
-                                            <option value="{{$location->id}}"> {{$location->name}} </option>
-                                        @endforeach
-                                    </select>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control form-control-sm mb-2" name="storeLocation">
+                                            <option> Select Location</option>
+                                            @foreach($allLocation as $location)
+                                                <option value="{{$location->id}}"> {{$location->name}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Store</label>
-                                <div class="col-sm-9">
-                                    <select name="state" class="form-control">
-                                        <option>--Select Store--</option>
-                                    </select>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Store</label>
+                                    <div class="col-sm-9">
+                                        <select name="state" class="form-control">
+                                            <option>--Select Store--</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                                @endcan
+                            @endcan
                             @cannot('isSuperAdmin')
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
@@ -112,7 +113,8 @@
                                 <button type="submit" class="btn btn-info">Save</button>
                             </div>
                             <div class="col-sm-4">
-                                <button type="submit" value="pr" name="pr" class="btn btn-success">Print and Save</button>
+                                <button type="submit" value="pr" name="pr" class="btn btn-success">Print and Save
+                                </button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -181,28 +183,23 @@
 </script>
 
 <script type="text/javascript">
-    jQuery(document).ready(function ()
-    {
-        jQuery('select[name="storeLocation"]').on('change',function(){
+    jQuery(document).ready(function () {
+        jQuery('select[name="storeLocation"]').on('change', function () {
             var countryID = jQuery(this).val();
-            if(countryID)
-            {
+            if (countryID) {
                 jQuery.ajax({
-                    url : 'getStores/' +countryID,
-                    type : "GET",
-                    dataType : "json",
-                    success:function(data)
-                    {
+                    url: 'getStores/' + countryID,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
                         console.log(data);
                         jQuery('select[name="state"]').empty();
-                        jQuery.each(data, function(key,value){
-                            $('select[name="state"]').append('<option value="'+ key +'">'+ value +'</option>');
+                        jQuery.each(data, function (key, value) {
+                            $('select[name="state"]').append('<option value="' + key + '">' + value + '</option>');
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 $('select[name="state"]').empty();
             }
         });

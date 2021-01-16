@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 //use Illuminate\Auth\Access\Gate;
+use App\Http\Requests\UserFromRequest;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Gate;
+use Flasher\Prime\FlasherInterface;
+
 class UserController extends Controller
 {
     /**
@@ -52,15 +55,14 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserFromRequest $request)
     {
-        $this->validate($request,[
-            'name' => 'required'
-        ]);
+
         $User = new User();
         $User->name = $request->name;
         $User->mobile = $request->number;
         $User->email = $request->email;
+        $User->address = $request->address;
         $User->password = bcrypt($request->password);
         $User->user_role_id = $request->userType;
         if ($request->userType==2)
@@ -73,7 +75,7 @@ class UserController extends Controller
 
         $User->save();
 
-        return redirect()->back()->with('successMsg','Category Successfully Saved');
+        return redirect()->back()->with('successMsg','User Successfully Saved');
     }
 
     /**
