@@ -38,6 +38,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::get('check-number/{number}', 'CustomerController@checkNumber');
     Route::get('transaction/getStores/{id}','TransactionController@getStorebyLocation');
     Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
+    Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
 
 
     Route::get('add-to-log', 'HomeController@myTestAddToLog');

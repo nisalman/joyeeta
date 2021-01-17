@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Transaction
+                        Disbursement
                     </header>
                     <div class="col-lg-8">
                         @include('layouts.partial.validationMessage')

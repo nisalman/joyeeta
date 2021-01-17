@@ -53,8 +53,8 @@
                                 <div class="col-sm-9">
                                     <select class="form-control form-control-sm mb-2" name="userType">
                                         <option> Select User Type</option>
-                                        <option value="1">Admin</option>
-                                        <option value="2">Operator</option>
+                                        <option value="2">Admin</option>
+                                        <option value="3">Operator</option>
                                     </select>
                                 </div>
                             </div>

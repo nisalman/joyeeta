@@ -18,13 +18,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('isSuperAdmin'))
-        {
-        $users=User::all();
-        return view('user.view', compact('users'));
-        }
-        else
-        {
+
+        if (Gate::allows('isSuperAdmin')) {
+            $users = User::all();
+            return view('user.view', compact('users'));
+        } else {
             return 'You are not allowed';
         }
 
@@ -38,12 +36,9 @@ class UserController extends Controller
     public function create()
     {
 
-        if (Gate::allows('isSuperAdmin'))
-        {
+        if (Gate::allows('isSuperAdmin')) {
             return view('user.create');
-        }
-        else
-        {
+        } else {
             return 'You are not allowed';
         }
 
@@ -52,7 +47,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(UserFromRequest $request)
@@ -65,23 +60,21 @@ class UserController extends Controller
         $User->address = $request->address;
         $User->password = bcrypt($request->password);
         $User->user_role_id = $request->userType;
-        if ($request->userType==2)
-        {
+        if ($request->userType == 2) {
             $User->role_name = "Admin";
-        }
-        else {
+        } else {
             $User->role_name = "Operator";
         }
 
         $User->save();
 
-        return redirect()->back()->with('successMsg','User Successfully Saved');
+        return redirect()->back()->with('successMsg', 'User Successfully Saved');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -92,30 +85,59 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $userType = User::select('role_name', 'user_role_id')
+            ->whereIn('user_role_id', ['2', '3'])
+            ->get();
+
+        $user = User::find($id);
+
+        return view('user.edit', compact('user', 'userType'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserFromRequest $request, $id)
     {
-        //
+        //return bcrypt($request->password);
+        $User=User::find($id);
+
+        if (isset($request->password))
+        {
+             $newPassword = bcrypt($request->password);
+            $User->update(['password' => $newPassword]);
+        }
+
+        $User->name = $request->name;
+        $User->mobile = $request->number;
+        $User->email = $request->email;
+        $User->address = $request->address;
+        $User->user_role_id = $request->userType;
+        if ($request->userType == 2) {
+            $User->role_name = "Admin";
+        } else {
+            $User->role_name = "Operator";
+        }
+
+        $User->save();
+        return redirect()->back()->with('successMsg', 'User Successfully Updated');
+
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

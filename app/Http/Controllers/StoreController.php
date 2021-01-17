@@ -85,9 +85,15 @@ class StoreController extends Controller
      * @param  \App\Store  $store
      * @return \Illuminate\Http\Response
      */
-    public function edit(Store $store)
+    public function edit($id)
     {
-        //
+        $locationData = location::where('admin_id',userType())
+            ->first();
+
+        $allLocations= location::all();
+        $Store= Store::find($id);
+        return view( 'store.edit', compact('Store', 'allLocations','locationData'));
+
     }
 
     /**
@@ -97,9 +103,27 @@ class StoreController extends Controller
      * @param  \App\Store  $store
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Store $store)
+    public function update(Request $request, $id)
     {
-        //
+
+        $Store = Store::find($id);
+
+        $Store->name = $request->storeName;
+        $Store->number = $request->storeNumber;
+        $Store->contact_name = $request->contactName;
+        $Store->contact_number = $request->contactNumber;
+        $Store->payment_method = $request->paymenMethod;
+        $Store->bank_mfs_name = $request->bank_mfs_name;
+        $Store->account_number = $request->acNumber;
+        $Store->payment_details = $request->paymentDetails;
+
+        $Store->save();
+
+        \LogActivity::addToLog(' New Store created');
+        return redirect()->back()->with('successMsg','Store Successfully Updated');
+
+
+
     }
 
     /**

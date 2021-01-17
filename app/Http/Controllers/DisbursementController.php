@@ -125,9 +125,17 @@ class DisbursementController extends Controller
      * @param \App\Disbursement $disbursement
      * @return \Illuminate\Http\Response
      */
-    public function edit(Disbursement $disbursement)
+    public function edit($id)
     {
-        //
+
+        $locationData = location::where('admin_id', userType())
+            ->first();
+        $allLocation = location::all();
+        $storeList = Store::select('id', 'name')
+            ->get();
+
+        return $disbursement = Disbursement::find($id);
+        return view('disbursement.edit', compact('storeList', 'locationData', 'allLocation', 'disbursement'));
     }
 
     /**
@@ -137,9 +145,57 @@ class DisbursementController extends Controller
      * @param \App\Disbursement $disbursement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Disbursement $disbursement)
+    public function update(Request $request, $id)
     {
-        //
+
+        $transactionQuery = Transaction::where('store_id', $request->storeId)
+            ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
+            ->where('is_disburse', 0);
+        if ($transactionQuery == NULL) {
+            return 'null';
+        }
+
+        $totalAmountBetweenDate = $transactionQuery->sum('final_payable');
+        $allTrans = $transactionQuery->select('created_at')->get();
+
+        foreach ($allTrans as $allTran) {
+            Transaction::where('created_at', $allTran->created_at)
+                ->update(['is_disburse' => 1]);
+        }
+
+        //return Store::where('id', $request->storeId);
+        $storeBalance = Store::find($request->storeId)->balance;
+
+        if ($storeBalance > $totalAmountBetweenDate) {
+            $balanceAfterDisburse = $storeBalance - $totalAmountBetweenDate;
+            // return $totalAmountBetweenDate;
+            Store::where('id', $request->storeId)
+                ->update(['balance' => $balanceAfterDisburse]);
+
+            $Disbursement = Disbursement::find($id);
+            $Disbursement->store_id = $request->storeId;
+            $Disbursement->disburse_id = $request->disburse_id;
+            $Disbursement->commission_amount = $request->commission;
+            $Disbursement->is_disbursement = $request->isDisvursed;
+            $Disbursement->payment_amount = $request->paymentAmount;
+            $Disbursement->payment_detail = $request->paymentDetails;
+            $Disbursement->net_payable = $totalAmountBetweenDate;
+            $Disbursement->discount = $request->discount;
+            $Disbursement->from = $request->from;
+            $Disbursement->to = $request->to;
+            //return $Disbursement;
+            $Disbursement->save();
+            \LogActivity::addToLog('Disbursement Stored');
+            return redirect()->back()->with('successMsg', 'Disbursement Successfully Updated');
+
+
+        } else {
+            return 'You dont get more than your earning';
+        }
+        //return $Disbursement;
+        $Disbursement->save();
+        \LogActivity::addToLog('Disbursement Stored');
+        return redirect()->back()->with('successMsg', 'Disbursement Successfully Made');
     }
 
     /**
@@ -148,9 +204,26 @@ class DisbursementController extends Controller
      * @param \App\Disbursement $disbursement
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Disbursement $disbursement)
+    public function destroy($id)
     {
-        //
+        /* $disbursement = Disbursement::find($id);
+
+         $storeData = Store::find($disbursement->store_id);
+
+        $transactionQuery = Transaction::where('store_id', $disbursement->store_id)
+            ->whereBetween('created_at', [$disbursement->from . '%', $disbursement->to . '%'])
+            ->where('is_disburse', 1);
+
+        $transactionQuery->update(['is_disburse'=> 0]);
+
+        $newBalance = $storeData->balance + $disbursement->net_payable;
+
+        $storeData->update(['balance' => $newBalance]);*/
+
+
+        //return Store::where('id', $request->storeId);
+        //$storeBalance = Store::find($request->storeId)->balance;
+
     }
 
 }

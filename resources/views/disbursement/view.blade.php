@@ -52,8 +52,22 @@
                                         @can('isSuperAdmin')
                                         <td>
                                             <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-check"></i></button>
-                                            <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
-                                            <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>
+                                            <a href="{{route('disbursement.edit', $disbursement->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
+
+
+
+
+                                            <form id="delete-form-{{ $disbursement->id }}" action="{{ route('disbursement.destroy',$disbursement->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                            <button type="button" class="btn btn-danger btn-sm"  onclick="if(confirm('Are you sure? You want to delete this?')){
+                                                event.preventDefault();
+                                                document.getElementById('delete-form-{{ $disbursement->id }}').submit();
+                                                }else {
+                                                event.preventDefault();
+                                                }"><i class="fa fa-trash-o "></i></button>
+
                                         </td>
                                         @endcan
                                     </tr>

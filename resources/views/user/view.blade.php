@@ -38,7 +38,7 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-check"></i></button>
-                                        <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
+                                        <a href="{{route('user.edit', $user->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
                                         <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>
                                     </td>
                                 </tr>
