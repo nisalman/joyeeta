@@ -8,6 +8,7 @@ use App\location;
 use App\Store;
 use App\Transaction;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB;
 
@@ -38,7 +39,8 @@ class TransactionController extends Controller
         $locationData = location::where('admin_id', userType())->first();
         $shopData = Store::where('location_id', $locationData->id)->get();
         $allLocation = location::all();
-        return view('transaction.create', compact('locationData', 'shopData','allLocation'));
+
+        return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
     }
 
     public function test()
@@ -52,12 +54,11 @@ class TransactionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TransactionFormRequest $request)
+    public function store(Request $request)
     {
 
-        //return $request->storeLocation;
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
-        $transactionID = $storePrefix.'-'.mt_rand(100000, 999999);
+        $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
 
 
         $getCustomerInfo = Customer::where('mobile', $request->country_name)
@@ -70,45 +71,17 @@ class TransactionController extends Controller
             $Customer->address = $request->customerAddress;
             $Customer->save();
 
-            $Transaction = new Transaction();
-            //$Transaction->name = $request->storeName;
-            $Transaction->transactionID = $transactionID;
-            $Transaction->store_id = $request->storeNumber;
-            $Transaction->location_id = $request->contactName;
-            $Transaction->customer_id = $Customer->id;
-            $Transaction->net_amount = $request->netAmount;
-            $Transaction->discount = $request->discount;
-            $Transaction->coupon = $request->coupon;
-            $Transaction->final_payable = $request->finalPayable;
-
-            $Transaction->save();
-            \LogActivity::addToLog('Transaction created');
-            return redirect()->back()->with('successMsg','Transaction Successfully created');
-
+            $customerId = $Customer->id;
 
         } else {
 
-            $customerId = Customer::where('mobile', $request->country_name)
+            $customer = Customer::where('mobile', $request->country_name)
                 ->select('id')
                 ->first();
-
-            $Transaction = new Transaction();
-            $Transaction->store_id = $request->storeNumber;
-            $Transaction->location_id = $request->contactName;
-            $Transaction->customer_id = $customerId->id;
-            $Transaction->net_amount = $request->netAmount;
-            $Transaction->discount = $request->discount;
-            $Transaction->coupon = $request->coupon;
-            $Transaction->final_payable = $request->finalPayable;
-            $Transaction->save();
-
+            $customerId = $customer->id;
         }
 
-        if ($request->pr)
-        {
-            return $this->print($request);
-        }
-
+        return $this->saveTransaction($customerId, $transactionID, $request);
 
     }
 
@@ -124,10 +97,35 @@ class TransactionController extends Controller
         //
     }
 
+    public function saveTransaction($customerId, $transactionID, $request)
+    {
+
+        $Transaction = new Transaction();
+        $Transaction->store_id = $request->storeLocation;
+        $Transaction->transactionID = $transactionID;
+        $Transaction->location_id = $request->state;
+        $Transaction->customer_id = $customerId;
+        $Transaction->net_amount = $request->netAmount;
+        $Transaction->discount = $request->discount;
+        $Transaction->coupon = $request->coupon;
+        $Transaction->final_payable = $request->finalPayable;
+        $Transaction->cardNo = $request->cardNo;
+        $Transaction->cardType = $request->cardType;
+        $Transaction->apprCode = $request->apprCode;
+        $Transaction->dateTime = $request->dateTime;
+        $Transaction->save();
+
+        if ($request->pr) {
+            return $this->print($request, $Transaction);
+        }
+
+        \LogActivity::addToLog('Transaction created');
+        return redirect()->back()->with('successMsg', 'Transaction Successfully created');
+    }
+
     public function autocomplete(Request $request)
     {
-//       return $data = DB::table('customers')
-//            ->get();
+
         if ($request->get('query')) {
 
             $query = $request->get('query');
@@ -143,7 +141,6 @@ class TransactionController extends Controller
             $output .= '</ul>';
             echo $output;
         }
-
 
     }
 
@@ -186,10 +183,19 @@ class TransactionController extends Controller
         $states = DB::table("stores")->where("location_id", $id)->pluck("name", "id");
         return json_encode($states);
     }
-    public function print($request)
+
+    public function print($request, $Transaction)
     {
-          $trans=$request;
-         return view('print',compact('trans'));
+        $trans = $request;
+        $trans['transactionID'] = $Transaction->transactionID;
+
+        $store=Store::find($trans->storeLocation)->first();
+        $trans['store_name'] = $store->name;
+        $trans['date']= Carbon::parse($trans->dateTime)->format('d-m-Y');
+        $trans['time']=Carbon::parse($trans->dateTime)->format('h:m');
+
+        //return $trans;
+        return view('print', compact('trans'));
     }
 
 }

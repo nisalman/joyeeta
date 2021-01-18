@@ -15,6 +15,7 @@ class CreateDisbursementsTable extends Migration
     {
         Schema::create('disbursements', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('disburse_id');
             $table->string('commission_amount');
             $table->string('store_id');
             $table->string('is_disbursement');
@@ -22,6 +23,8 @@ class CreateDisbursementsTable extends Migration
             $table->string('payment_detail');
             $table->string('net_payable');
             $table->string('discount');
+            $table->dateTime('from');
+            $table->dateTime('to');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('transactionID');
             $table->string('store_id');
             $table->string('location_id');
             $table->string('customer_id');
@@ -23,6 +23,11 @@ class CreateTransactionsTable extends Migration
             $table->string('discount');
             $table->string('coupon');
             $table->string('final_payable');
+            $table->string('cardNo');
+            $table->integer('cardType');
+            $table->string('apprCode');
+            $table->dateTime('dateTime');
+            $table->string('is_disburse');
             $table->timestamps();
         });
 

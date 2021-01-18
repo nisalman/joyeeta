@@ -16,11 +16,11 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('slug');
+            $table->string('prefix');
             $table->string('contact_person');
             $table->string('contact_number');
             $table->string('address');
-            $table->string('location_admin_id');
+            $table->string('admin_id');
             $table->string('operator_id');
             $table->timestamps();
         });

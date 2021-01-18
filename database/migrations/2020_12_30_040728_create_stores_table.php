@@ -19,6 +19,8 @@ class CreateStoresTable extends Migration
             $table->string('number');
             $table->string('contact_name');
             $table->string('contact_number');
+            $table->string('location_id');
+            $table->integer('balance');
             $table->string('payment_method');
             $table->string('bank_mfs_name');
             $table->string('account_number');

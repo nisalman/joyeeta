@@ -8,7 +8,7 @@
                     <header class="card-header">
                         Transaction
                     </header>
-                    <div class="col-lg-8">
+                    <div class="col-lg-12">
                         @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             {!! Form::open(['route' => 'transaction.store'], ['method'=>'post']) !!}
@@ -16,8 +16,8 @@
                             @can('isSuperAdmin')
 
                                 <div class="form-group row">
-                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
-                                    <div class="col-sm-9">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Location</label>
+                                    <div class="col-sm-4">
                                         <select class="form-control form-control-sm mb-2" name="storeLocation">
                                             <option> Select Location</option>
                                             @foreach($allLocation as $location)
@@ -25,10 +25,9 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Store</label>
-                                    <div class="col-sm-9">
+
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Store</label>
+                                    <div class="col-sm-4">
                                         <select name="state" class="form-control">
                                             <option>--Select Store--</option>
                                         </select>
@@ -37,9 +36,9 @@
                             @endcan
                             @cannot('isSuperAdmin')
                                 <div class="form-group row">
-                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Location</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-control form-control-sm mb-2" name="storeLocation">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Location</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control form-control-sm mb-1" name="storeLocation">
                                             <option> Select Location</option>
                                             @foreach($shopData as $shop)
                                                 <option value="{{$shop->id}}"> {{$shop->name}} </option>
@@ -49,64 +48,83 @@
                                 </div>
                             @endcannot
                             <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Customer
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Customer
                                     Number</label>
-                                <div class="col-sm-9">
-
+                                <div class="col-sm-4">
                                     <input type="number" name="country_name" id="country_name" class="form-control"/>
                                     <div id="countryList">
                                     </div>
                                 </div>
-                            </div>
 
-
-                            <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Customer Name</label>
-                                <div class="col-sm-9">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Customer Name</label>
+                                <div class="col-sm-4">
                                     <input type="text" id='customerName' name="customerName" class="form-control"
                                            value="">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Customer address</label>
-                                <div class="col-sm-9">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Customer address</label>
+                                <div class="col-sm-4">
                                     <input type="text" class="form-control" name="customerAddress" value=""
                                            id="customerAddress">
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Net Amount</label>
-                                <div class="col-sm-9">
+
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Net Amount</label>
+                                <div class="col-sm-4">
                                     <input type="name" class="form-control" name="netAmount">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Discount</label>
-                                <div class="col-sm-9">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Discount</label>
+                                <div class="col-sm-4">
                                     <input type="number" class="form-control" name="discount"
                                            aria-describedby="basic-addon3">
                                 </div>
-                            </div>
 
-
-                            <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Coupon</label>
-                                <div class="col-sm-9">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Coupon</label>
+                                <div class="col-sm-4">
                                     <input type="text" class="form-control" name="coupon">
                                 </div>
                             </div>
+
                             <div class="form-group row">
-                                <label for="inputPassword3" class="col-sm-3 col-form-label">Final Payable
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Final Payable
                                     Amount</label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-4">
                                     <input type="text" class="form-control" name="finalPayable">
                                 </div>
+
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Card No</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="cardNo">
+                                </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Card Type</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control form-control-sm mb-2" name="cardType">
+                                        <option >Select Card Type</option>
+                                        <option value="1"> Amex</option>
+                                        <option value="2"> Visa</option>
+                                        <option value="3"> Master </option>
+                                        <option value="4"> American Express</option>
+                                    </select>
+                                </div>
 
-
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">APPR Code</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="apprCode">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Date Time
+                                    </label>
+                                <div class="col-sm-4">
+                                    <input type="datetime-local" class="form-control" name="dateTime">
+                                </div>
+                            </div>
                         </div>
-
 
                         <div class="form-group row">
                             <div class="col-sm-2">
@@ -116,6 +134,7 @@
                                 <button type="submit" value="pr" name="pr" class="btn btn-success">Print and Save
                                 </button>
                             </div>
+
                         </div>
                         {!! Form::close() !!}
 
