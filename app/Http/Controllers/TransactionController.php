@@ -21,6 +21,8 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        return Carbon::parse()->nowWithSameTz()->format('ydmhm');
+
         \LogActivity::addToLog('Transaction Viewed');
 
         $transactions = Transaction::all();
@@ -59,6 +61,7 @@ class TransactionController extends Controller
 
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
         $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
+
 
 
         $getCustomerInfo = Customer::where('mobile', $request->country_name)

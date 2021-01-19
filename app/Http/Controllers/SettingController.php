@@ -71,7 +71,7 @@ class SettingController extends Controller
      * @param  \App\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, FlasherInterface $flasher)
+    public function update(Request $request, $id)
     {
         \LogActivity::addToLog('Setting Update');
 
@@ -80,8 +80,7 @@ class SettingController extends Controller
         $Setting->tax = $request->tax;
         $Setting->commission = $request->commission;
         $Setting->save();
-        $flasher->addSuccess('Setting successfully updated');
-        return redirect()->back();
+        return redirect()->back()->with('successMsg','Settings Successfully Updated');
     }
 
     /**
