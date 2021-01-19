@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('transactionID');
-            $table->string('invoice_no');
+            $table->string('invoice_no')->default('N/A');
             $table->string('store_id');
             $table->string('location_id');
             $table->string('customer_id');

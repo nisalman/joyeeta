@@ -21,7 +21,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        return Carbon::parse()->nowWithSameTz()->format('ydmhm');
+
 
         \LogActivity::addToLog('Transaction Viewed');
 
@@ -62,10 +62,10 @@ class TransactionController extends Controller
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
         $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
 
-
-
         $getCustomerInfo = Customer::where('mobile', $request->country_name)
             ->first();
+
+        $invoiceNO = Carbon::parse()->nowWithSameTz()->format('ydmhm');
 
         if ($getCustomerInfo == NULL) {
             $Customer = new Customer();
@@ -84,7 +84,7 @@ class TransactionController extends Controller
             $customerId = $customer->id;
         }
 
-        return $this->saveTransaction($customerId, $transactionID, $request);
+        return $this->saveTransaction($customerId, $transactionID,$invoiceNO, $request);
 
     }
 
@@ -100,9 +100,8 @@ class TransactionController extends Controller
         //
     }
 
-    public function saveTransaction($customerId, $transactionID, $request)
+    public function saveTransaction($customerId, $transactionID,$invoiceNO, $request)
     {
-
         $Transaction = new Transaction();
         $Transaction->store_id = $request->storeLocation;
         $Transaction->transactionID = $transactionID;
@@ -116,6 +115,7 @@ class TransactionController extends Controller
         $Transaction->cardType = $request->cardType;
         $Transaction->apprCode = $request->apprCode;
         $Transaction->dateTime = $request->dateTime;
+        $Transaction->invoice_no = $request->storeLocation.$invoiceNO;
         $Transaction->save();
 
         if ($request->pr) {
@@ -192,10 +192,11 @@ class TransactionController extends Controller
         $trans = $request;
         $trans['transactionID'] = $Transaction->transactionID;
 
-        $store=Store::find($trans->storeLocation)->first();
+        $store = Store::find($trans->storeLocation)->first();
         $trans['store_name'] = $store->name;
-        $trans['date']= Carbon::parse($trans->dateTime)->format('d-m-Y');
-        $trans['time']=Carbon::parse($trans->dateTime)->format('h:m');
+        $trans['date'] = Carbon::parse($trans->dateTime)->format('d-m-Y');
+        $trans['time'] = Carbon::parse($trans->dateTime)->format('h:m');
+        $trans['invoice_no'] = $Transaction->invoice_no;
 
         //return $trans;
         return view('print', compact('trans'));

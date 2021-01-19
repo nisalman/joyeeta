@@ -33,7 +33,7 @@
                         <div class="col-lg-4 col-sm-4">
                             <h4>INVOICE INFO</h4>
                             <ul class="unstyled">
-                                <li>Invoice Number : <strong>69626</strong></li>
+                                <li>Invoice Number : <strong>{{$trans->invoice_no}}</strong></li>
                                 <li>Invoice Date : {{$trans->date}}</li>
                                 <li>Invoice Time : {{$trans->time}}</li>
                                 <li>APP Code     : {{$trans->apprCode}}</li>
