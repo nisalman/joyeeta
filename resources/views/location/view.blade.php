@@ -14,7 +14,7 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Slug</th>
+                                    <th>Prefix</th>
                                     <th>Contact Person</th>
                                     <th>Contact Number</th>
                                     <th>Address</th>
@@ -27,7 +27,7 @@
                                 @foreach($locations as $location)
                                     <tr class="gradeX">
                                         <td>{{$location->name}}</td>
-                                        <td>{{$location->slug}}</td>
+                                        <td>{{$location->prefix}}</td>
                                         <td>{{$location->contact_person}}</td>
                                         <td>{{$location->contact_number}}</td>
                                         <td>{{$location->address}}</td>
