@@ -22,7 +22,7 @@ class TransactionController extends Controller
     public function index()
     {
 
-
+        $this->vat_tax_calculation();
         \LogActivity::addToLog('Transaction Viewed');
 
         $transactions = Transaction::all();
@@ -68,6 +68,7 @@ class TransactionController extends Controller
         $invoiceNO = Carbon::parse()->nowWithSameTz()->format('ydmhm');
 
         if ($getCustomerInfo == NULL) {
+
             $Customer = new Customer();
             $Customer->name = $request->customerName;
             $Customer->mobile = $request->country_name;
@@ -200,6 +201,10 @@ class TransactionController extends Controller
 
         //return $trans;
         return view('print', compact('trans'));
+    }
+    public function vat_tax_calculation()
+    {
+        return 1;
     }
 
 }

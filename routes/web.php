@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
