@@ -60,6 +60,7 @@ class UserController extends Controller
         $User->address = $request->address;
         $User->password = bcrypt($request->password);
         $User->user_role_id = $request->userType;
+        $User->status = 1;
         if ($request->userType == 2) {
             $User->role_name = "Admin";
         } else {
@@ -122,6 +123,7 @@ class UserController extends Controller
         $User->email = $request->email;
         $User->address = $request->address;
         $User->user_role_id = $request->userType;
+
         if ($request->userType == 2) {
             $User->role_name = "Admin";
         } else {
