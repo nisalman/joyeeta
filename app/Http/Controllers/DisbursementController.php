@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Disbursement;
 use App\Http\Requests\DisbursementFormRequest;
 use App\location;
+use App\Setting;
 use App\Store;
 use App\Transaction;
 use Illuminate\Http\Request;
@@ -85,15 +86,18 @@ class DisbursementController extends Controller
             Store::where('id', $request->storeId)
                 ->update(['balance' => $balanceAfterDisburse]);
 
+            $commmission=Setting::find(1)->commission;
+            $ekShop_commission=($commmission*$request->commission)/100;
+            $netPayble=$request->commission-$ekShop_commission;
+
             $Disbursement = new Disbursement();
             $Disbursement->store_id = $request->storeId;
             $Disbursement->disburse_id = $disburseID;
-            $Disbursement->commission_amount = $request->commission;
+            $Disbursement->commission_amount = $ekShop_commission;
             $Disbursement->is_disbursement = $request->isDisvursed;
-            $Disbursement->payment_amount = $request->paymentAmount;
+            $Disbursement->payment_amount = $netPayble;
             $Disbursement->payment_detail = $request->paymentDetails;
             $Disbursement->net_payable = $totalAmountBetweenDate;
-            $Disbursement->discount = $request->discount;
             $Disbursement->from = $request->from;
             $Disbursement->to = $request->to;
             //return $Disbursement;
@@ -103,7 +107,7 @@ class DisbursementController extends Controller
 
 
         } else {
-            return 'You dont get more than your earning';
+            return redirect()->back()->with('error', 'You dont get more than your earning');
         }
 
     }

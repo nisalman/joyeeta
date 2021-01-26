@@ -27,10 +27,6 @@ class DisbursementFormRequest extends FormRequest
     {
         return [
             'storeId' => 'required',
-            'commission' => 'required',
-            'isDisvursed' => 'required',
-            'paymentAmount' => 'required',
-            'discount' => 'required',
             'from' => 'required',
             'to' => 'required',
         ];
@@ -40,11 +36,6 @@ class DisbursementFormRequest extends FormRequest
     {
         return [
             'storeId.required' => 'Give a name of Customer',
-            'commission.required' => 'Insert Mobile number',
-            'isDisvursed.required' => 'Insert Customer address.',
-            'paymentAmount.required' => 'Insert payable number',
-            'contactName.required' => 'Insert contact number',
-            'discount.required' => 'Insert discount amount',
             'from.required' => 'Select date from',
             'to.required' => 'Select to date',
         ];
