@@ -94,7 +94,6 @@ class DisbursementController extends Controller
             $Disbursement->store_id = $request->storeId;
             $Disbursement->disburse_id = $disburseID;
             $Disbursement->commission_amount = $ekShop_commission;
-            $Disbursement->is_disbursement = $request->isDisvursed;
             $Disbursement->payment_amount = $netPayble;
             $Disbursement->payment_detail = $request->paymentDetails;
             $Disbursement->net_payable = $totalAmountBetweenDate;
