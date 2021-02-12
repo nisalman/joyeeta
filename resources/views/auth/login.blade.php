@@ -76,7 +76,7 @@
 --}}
 
 
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Joyeeta</title>
@@ -87,7 +87,8 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{asset('login_asset/vendor/bootstrap/css/bootstrap.min.css')}}">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{{asset('login_asset/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" type="text/css"
+          href="{{asset('login_asset/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{asset('login_asset/css/util.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('login_asset/css/main.css')}}">
@@ -100,16 +101,15 @@
         <div class="wrap-login100">
             <form class="login100-form validate-form" method="POST" action="{{ route('login') }}">
                 @csrf
-					<span class="login100-form-title p-b-26">
-                        						<img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}" height="80px" width="80px"/>
-
-
+                <span class="login100-form-title p-b-26">
+                        						<img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}"
+                                                     height="80px" width="80px"/>
 					</span>
                 <span class="login100-form-title p-b-48" style="color: #ffff00">
                     Joyeeta POS
 					</span>
 
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
+                <div class="wrap-input100 validate-input" data-validate="Valid email is: a@b.c">
                     <input class="input100" type="text" name="email">
                     <span class="focus-input100" data-placeholder="Email"></span>
                 </div>
