@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 
+
+
 class DisbursementController extends Controller
 {
     /**
@@ -25,9 +27,71 @@ class DisbursementController extends Controller
         \LogActivity::addToLog('Disbursement Clicked');
 
 
-        $disbursements = Disbursement::all();
+         $disbursements = Disbursement::all()->sortByDesc('id');
         return view('disbursement.view', compact('disbursements'));
 
+    }
+
+    public function batchList()
+    {
+        // return Transaction::all();
+         $transData = Transaction::whereNotNull('batch_id')->get();
+        $groupTrans = $transData->groupBy('batch_id');
+
+         $trans = [];
+
+        foreach ($groupTrans as $keys => $froupTran) {
+            $totalPay = 0;
+
+            foreach ($froupTran as $key => $tran) {
+
+                if ($keys == $tran->batch_id) {
+                    $totalPay = $totalPay + $tran->final_payable;
+                }
+            }
+
+            $trans[$keys]['total_pay'] = $totalPay;
+            $trans[$keys]['store_id'] = $tran->store_id;
+            $trans[$keys]['transactionID'] = $tran->transactionID;
+            $trans[$keys]['fromDate'] = $froupTran->min('created_at');
+            $trans[$keys]['toDate'] = $froupTran->max('created_at');
+
+        }
+
+        return view('disbursement.batchList', compact('trans'))->with('successMsg', 'Batch Successfully created');
+    }
+
+    public function batchDetail($id)
+    {
+        //return $total;
+        $batchTransaction = Transaction::where('batch_id',$id)->get();
+        return view('disbursement.batch_detail', compact('batchTransaction'));
+    }
+    public function batchPayment(Request $request)
+    {
+       // return $request;
+         $commission=Setting::find(1)->commission;
+         $commissionAmount =($request->totalAmount*$commission)/100;
+         $netPayable=$request->totalAmount-$commissionAmount;
+        return view('disbursement.final_disbursement', compact('request','netPayable', 'commissionAmount'));
+
+        /*$Disbursement = new Disbursement();
+        $Disbursement->=$request->batchID;
+        $Disbursement->=$request->transactionID;
+        $Disbursement->=$request->batchID;
+        $Disbursement->=$request->storeID;*/
+        /*Transaction::where('batch_id', $id)
+            ->get();
+        $batchTrans->update(
+            ['batch_id' => $batchId]
+        );
+        return "paid";*/
+    }
+    public function batchDelete($id)
+    {
+        Transaction::where('batch_id', $id)
+            ->update(['batch_id' => null]);
+        return redirect()->back()->with('successMsg', 'Disbursement batch Successfully Deleted');
     }
 
     /**
@@ -53,10 +117,21 @@ class DisbursementController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DisbursementFormRequest $request)
+    public function store(Request $request)
     {
-        // return $request;
-
+        //return $request;
+        $locationData = location::where('admin_id', userType())
+            ->first();
+        $allLocation = location::all();
+        $storeList = Store::select('id', 'name')
+            ->get();
+        $search = Transaction::where('store_id', $request->storeId)
+            ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
+            ->where('is_disburse', '0');
+        $searchRes = $search->get();
+        $searchSum = $search->sum('final_payable');
+        return view('disbursement.batch_selection', compact('searchRes',
+            'locationData', 'allLocation', 'storeList', 'searchSum'));
 
         $storePrefix = Store::find($request->storeId)->location->prefix;
         $disburseID = $storePrefix . '-' . mt_rand(100000, 999999);
@@ -65,16 +140,22 @@ class DisbursementController extends Controller
         $transactionQuery = Transaction::where('store_id', $request->storeId)
             ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
             ->where('is_disburse', 0);
-        if ($transactionQuery == NULL) {
-            return 'null';
-        }
+//return count($transactionQuery->get();
+        if ($transactionQuery->get() == '0') {
+            return redirect()->back()->with('error', 'No data found');
 
-        $totalAmountBetweenDate = $transactionQuery->sum('final_payable');
-        $allTrans = $transactionQuery->select('created_at')->get();
+        }
+        if (count($transactionQuery->get()) > 1) {
+            $totalAmountBetweenDate = $transactionQuery->sum('final_payable');
+        } else {
+            $oneTrans = $transactionQuery->first();
+            $totalAmountBetweenDate = $oneTrans['final_payable'];
+        }
+        $allTrans = $transactionQuery->get();
 
         foreach ($allTrans as $allTran) {
-            Transaction::where('created_at', $allTran->created_at)
-                ->update(['is_disburse' => 1]);
+            Transaction::where('id', $allTran->id)
+                ->update(['is_disburse' => '1']);
         }
 
         //return Store::where('id', $request->storeId);
@@ -82,13 +163,13 @@ class DisbursementController extends Controller
 
         if ($storeBalance > $totalAmountBetweenDate) {
             $balanceAfterDisburse = $storeBalance - $totalAmountBetweenDate;
-            // return $totalAmountBetweenDate;
+            //$totalAmountBetweenDate;
             Store::where('id', $request->storeId)
                 ->update(['balance' => $balanceAfterDisburse]);
 
-            $commmission=Setting::find(1)->commission;
-            $ekShop_commission=($commmission*$request->commission)/100;
-            $netPayble=$request->commission-$ekShop_commission;
+            $commmission = Setting::find(1)->commission;
+            $ekShop_commission = ($commmission * $totalAmountBetweenDate) / 100;
+            $netPayble = $totalAmountBetweenDate - $ekShop_commission;
 
             $Disbursement = new Disbursement();
             $Disbursement->store_id = $request->storeId;
@@ -106,8 +187,69 @@ class DisbursementController extends Controller
 
 
         } else {
-            return redirect()->back()->with('error', 'You dont get more than your earning');
+            return redirect()->back()->with('successMsg', 'You dont get more than your earning');
         }
+
+    }
+
+    public function batchDisburse(Request $request)
+    {
+         $transID= $request->transID;
+//            return $transID[1];
+         /* $transData = Transaction::whereIn('id', $request->transID)
+            ->whereNull('batch_id')
+            ->orWhere('batch_id', '=', "")
+            ->get();*/
+
+        $nullChecking=[];
+        for ($i = 0; $i < count($transID); $i++) {
+            $nullChecking[$i] = $transTableData=Transaction::find( $transID[$i]);
+            if ($transTableData->batch_id==null OR  $transTableData->batch_id=="")
+            {
+                $nullChecking[$i]=$transTableData->id;
+            }
+            else{
+                toastr()->warning('Transaction id '.$transTableData->transactionID.'is already exist at '.$transTableData->batch_id , 'Stop!');
+               // return redirect()->back()->with('error', 'Already in a batch');
+            }
+
+
+        }
+
+
+            //return $transData[0]['id'];
+            $storePrefix = Store::find($request->storeID)->location->prefix;
+            $batchId = $storePrefix . '-' . mt_rand(100000, 999999);
+            for ($i = 0; $i < count($nullChecking); $i++) {
+
+                $batchTrans = Transaction::where('id', $nullChecking[$i]);
+                $batchTrans->update(
+                    ['batch_id' => $batchId]
+                );
+            }
+
+            return $this->batchList();
+            $transData = Transaction::where('id', $request->transID);
+            $getExistingBatchs = $transData->select('batch_id')->get();
+            $nullFieldCheck = $getExistingBatchs = $transData->where('batch_id', null)->orWhere('batch_id', '')->get();
+
+
+
+        /*        foreach ($getExistingBatchs as $existingBatch) {
+                    echo $existingBatch->batch_id . '<br>';
+        //            if (empty($existingBatch->batch_id)) {
+        //                return $existingBatch->batch_id;
+        //                // return view('disbursement.view')->with('error', 'Batch already created for this transaction');
+        //            } else {
+        //                return "Not";
+        //            }
+                }*/
+        return;
+
+//        $transData->update(['batch_id' => $batchId]);
+//        return;
+//        //return $this->batchDisburse()->with('successMsg', 'Batch already created for this transaction');
+//        return view('disbursement.view')->with('successMsg', 'Batch already created for this transaction');
 
     }
 
@@ -207,6 +349,43 @@ class DisbursementController extends Controller
      * @param \App\Disbursement $disbursement
      * @return \Illuminate\Http\Response
      */
+    public function confirmDisburse(Request $request)
+    {
+
+        $this->validate($request,[
+
+            'image' => 'mimes:jpeg,jpg,bmp,png',
+        ]);
+        $image = $request->file('image');
+        if (isset($image))
+        {
+            $currentDate = Carbon::now()->toDateString();
+            $imagename = $request->batchID.'-'. $currentDate .'-'. uniqid() .'.'. $image->getClientOriginalExtension();
+            if (!file_exists('uploads/slider'))
+            {
+                mkdir('uploads', 0777 , true);
+            }
+            $image->move('uploads/',$imagename);
+        }else {
+            $imagename = $request->image;
+        }
+        $Disbursement =new Disbursement();
+        $Disbursement->comment = $request->comment;
+        $Disbursement->disburse_id = $request->batchID;
+        $Disbursement->is_disbursement = 1;
+        $Disbursement->commission_amount = $request->commissionAmount;
+        $Disbursement->store_id = $request->storeID;
+        $Disbursement->net_payable = $request->totalAmount;
+        $Disbursement->image = $imagename;
+       // return $Disbursement;
+        Transaction::where('batch_id', $request->batchID)
+            ->update([
+                'is_disburse'=>1
+            ]);
+        $Disbursement->save();
+        return $this->index()->with('successMsg', 'Batch Successfully disbursed');
+    }
+
     public function destroy($id)
     {
         /* $disbursement = Disbursement::find($id);

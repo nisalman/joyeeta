@@ -35,7 +35,7 @@ class DisbursementFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'storeId.required' => 'Give a name of Customer',
+            'storeId.required' => 'Select store',
             'from.required' => 'Select date from',
             'to.required' => 'Select to date',
         ];

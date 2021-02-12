@@ -8,19 +8,21 @@
                     <header class="card-header">
                         Advanced Table
                     </header>
+                    @include('layouts.partial.validationMessage')
 
                     <div class="card-body">
                         <div class="adv-table">
                             <table class="display table table-bordered table-striped" id="dynamic-table">
                                 <thead>
                                 <tr>
+                                    <th>Disburse ID</th>
                                     <th>Store Name</th>
                                     <th>Paid Amount</th>
-                                    <th>Payment Detail</th>
-                                    <th>Net Payable</th>
-                                    <th>Discount</th>
-                                    <th class="hidden-phone">From</th>
-                                    <th class="hidden-phone">To</th>
+                                    <th>Commission</th>
+                                    <th>images</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+
 {{--                                    <th class="hidden-phone">Disbursement</th>--}}
                                     @can('isSuperAdmin')
                                     <th>Action</th>
@@ -31,16 +33,14 @@
                                 @foreach($disbursements as $disbursement)
 
                                     <tr class="gradeX">
+                                        <td>{{$disbursement->disburse_id}}</td>
                                         <td>{{$disbursement->store->name}}</td>
-                                        <td>{{$disbursement->payment_amount}}</td>
-                                        <td>{{$disbursement->payment_detail}}</td>
                                         <td>{{$disbursement->net_payable}}</td>
-                                        <td>{{$disbursement->discount}}</td>
+                                        <td>{{$disbursement->commission_amount}}</td>
+                                        <td><img src="{{asset('uploads/'.$disbursement->image)}}" width="40" height="40"></td>
+                                        <td>{{$disbursement->comment}}</td>
                                         <td class="center hidden-phone">
-                                            {{ Carbon\Carbon::parse($disbursement->from)->format('d/m/Y') }}
-                                        </td>
-                                        <td class="center hidden-phone">
-                                            {{ Carbon\Carbon::parse($disbursement->to)->format('d/m/Y') }}
+                                            {{ Carbon\Carbon::parse($disbursement->created_at)->format('d/m/Y') }}
                                         </td>
                                         {{--<td class="center hidden-phone">
                                             @if($disbursement->is_disbursement==1)

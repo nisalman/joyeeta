@@ -38,7 +38,17 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
 
     Route::get('check-number/{number}', 'CustomerController@checkNumber');
     Route::get('transaction/getStores/{id}','TransactionController@getStorebyLocation');
-    Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
+
+    Route::get('disbursement/make-batch','DisbursementController@getSearchResult');
+    Route::post('disbursement/batch-disburse','DisbursementController@batchDisburse')->name('disbursement.batch');
+    Route::get('disbursements/batchList','DisbursementController@batchList')->name('disbursement.batchList');
+    Route::get('disbursements/batch_detail/{id}','DisbursementController@batchDetail')->name('disbursement.batchDetail');
+    Route::post('disbursements/batch_payment','DisbursementController@batchPayment')->name('disbursement.payment');
+    Route::get('disbursements/batch_delete/{id}','DisbursementController@batchDelete')->name('batch.delete');
+    Route::post('disbursements/confirm','DisbursementController@confirmDisburse')->name('disbursement.confirmation');
+
+
+    Route::get('getStores/{id}','TransactionController@getStorebyLocation');
     Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
 
 

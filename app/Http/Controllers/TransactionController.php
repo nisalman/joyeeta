@@ -67,6 +67,9 @@ class TransactionController extends Controller
 
         $invoiceNO = Carbon::parse()->nowWithSameTz()->format('ydmhm');
 
+        $updateBalance = Store::find($request->storeLocation)->balance+$request->finalPayable ;
+
+
         if ($getCustomerInfo == NULL) {
 
             $Customer = new Customer();
@@ -85,7 +88,7 @@ class TransactionController extends Controller
             $customerId = $customer->id;
         }
 
-        return $this->saveTransaction($customerId, $transactionID,$invoiceNO, $request);
+        return $this->saveTransaction($customerId, $transactionID,$invoiceNO, $request, $updateBalance);
 
     }
 
@@ -101,7 +104,7 @@ class TransactionController extends Controller
         //
     }
 
-    public function saveTransaction($customerId, $transactionID,$invoiceNO, $request)
+    public function saveTransaction($customerId, $transactionID,$invoiceNO, $request, $updateBalance)
     {
         $Transaction = new Transaction();
         $Transaction->store_id = $request->storeLocation;
@@ -118,6 +121,9 @@ class TransactionController extends Controller
         $Transaction->dateTime = $request->dateTime;
         $Transaction->invoice_no = $request->storeLocation.$invoiceNO;
         $Transaction->save();
+
+        Store::where('id', $request->storeLocation)
+            ->update(['balance' => $updateBalance]);
 
         if ($request->pr) {
             return $this->print($request, $Transaction);

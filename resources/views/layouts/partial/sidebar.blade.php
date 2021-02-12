@@ -47,6 +47,7 @@
                 </a>
                 <ul class="sub">
                     <li><a  href="{{route('disbursement.create')}}">Create</a></li>
+                    <li><a  href="{{route('disbursement.batchList')}}">Batch List</a></li>
                     <li><a  href="{{route('disbursement.index')}}">Disbursement History</a></li>
                 </ul>
             </li>
