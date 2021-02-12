@@ -107,13 +107,10 @@ class TransactionController extends Controller
     public function saveTransaction($customerId, $transactionID,$invoiceNO, $request, $updateBalance)
     {
         $Transaction = new Transaction();
-        $Transaction->store_id = $request->storeLocation;
+        $Transaction->store_id =$request->state;
         $Transaction->transactionID = $transactionID;
-        $Transaction->location_id = $request->state;
+        $Transaction->location_id =  $request->storeLocation;
         $Transaction->customer_id = $customerId;
-        $Transaction->net_amount = $request->netAmount;
-        $Transaction->discount = $request->discount;
-        $Transaction->coupon = $request->coupon;
         $Transaction->final_payable = $request->finalPayable;
         $Transaction->cardNo = $request->cardNo;
         $Transaction->cardType = $request->cardType;
@@ -135,7 +132,6 @@ class TransactionController extends Controller
 
     public function autocomplete(Request $request)
     {
-
         if ($request->get('query')) {
 
             $query = $request->get('query');
@@ -151,7 +147,6 @@ class TransactionController extends Controller
             $output .= '</ul>';
             echo $output;
         }
-
     }
 
     /**

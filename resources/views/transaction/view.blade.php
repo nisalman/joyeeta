@@ -18,9 +18,6 @@
                                     <th>Store Name</th>
                                     <th>Location</th>
                                     <th>Customer</th>
-                                    <th>Net Amount</th>
-                                    <th>Discount</th>
-                                    <th class="hidden-phone">Coupon</th>
                                     <th class="hidden-phone">Final Payable</th>
                                     <th>Disbursed</th>
                                     <th>Date</th>
@@ -34,9 +31,6 @@
                                         <td>{{$transaction->store->name}}</td>
                                         <td>{{$transaction->location->name}}</td>
                                         <td>{{$transaction->customer->name}}</td>
-                                        <td>{{$transaction->net_amount}}</td>
-                                        <td>{{$transaction->discount}}</td>
-                                        <td>{{$transaction->coupon}}</td>
                                         <td class="center hidden-phone">{{$transaction->final_payable}}</td>
                                         <td>
                                             @if($transaction->is_disburse==1)
@@ -59,5 +53,6 @@
                         </div>
                     </div>
                 </section>
+
 @endsection
 

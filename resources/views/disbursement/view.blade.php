@@ -24,16 +24,18 @@
                                     <th>Date</th>
 
 {{--                                    <th class="hidden-phone">Disbursement</th>--}}
-                                    @can('isSuperAdmin')
+                                    {{--@can('isSuperAdmin')
                                     <th>Action</th>
-                                    @endcan
+                                    @endcan--}}
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($disbursements as $disbursement)
 
                                     <tr class="gradeX">
-                                        <td>{{$disbursement->disburse_id}}</td>
+                                        <td><a href="{{route('disbursement.batchDetail',$disbursement->disburse_id)}}"
+                                               style="color: red"> {{$disbursement->disburse_id}}</a></td>
+                                        {{--<td>{{$disbursement->disburse_id}}</td>--}}
                                         <td>{{$disbursement->store->name}}</td>
                                         <td>{{$disbursement->net_payable}}</td>
                                         <td>{{$disbursement->commission_amount}}</td>
@@ -49,7 +51,7 @@
                                                 <span class="badge badge-danger label-mini">No</span>
                                             @endif
                                         </td>--}}
-                                        @can('isSuperAdmin')
+                                        {{--@can('isSuperAdmin')
                                         <td>
                                             <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-check"></i></button>
                                             <a href="{{route('disbursement.edit', $disbursement->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
@@ -69,7 +71,7 @@
                                                 }"><i class="fa fa-trash-o "></i></button>
 
                                         </td>
-                                        @endcan
+                                        @endcan--}}
                                     </tr>
                                 @endforeach
                                 </tbody>

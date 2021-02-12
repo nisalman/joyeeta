@@ -101,10 +101,12 @@
             <form class="login100-form validate-form" method="POST" action="{{ route('login') }}">
                 @csrf
 					<span class="login100-form-title p-b-26">
-						Joyeeta POS
+                        						<img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}" height="80px" width="80px"/>
+
+
 					</span>
-                <span class="login100-form-title p-b-48">
-						<img src="{{asset('admin/img/Joyeeta.png')}}" height="50px" width="100px"/>
+                <span class="login100-form-title p-b-48" style="color: #ffff00">
+                    Joyeeta POS
 					</span>
 
                 <div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">

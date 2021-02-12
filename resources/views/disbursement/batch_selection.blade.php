@@ -15,6 +15,11 @@
                         <div class="card-body">
                             @include('disbursement.search')
 
+                            @if(count($searchRes)==0)
+                                @php
+                                    toastr()->warning('No data found, try again', 'Sorry')
+                                @endphp
+                            @endif
                             {!! Form::open(['route' => 'disbursement.batch'], ['method'=>'post']) !!}
 
                             <div class="adv-table">
@@ -22,7 +27,7 @@
                                 <table class="display table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th><input type="checkbox"></th>
+                                        <th><input type="checkbox" id="select-all"></th>
                                         <th>Transaction ID</th>
                                         <th>Disbursement</th>
                                         <th>Date</th>
@@ -30,8 +35,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+
                                     @foreach($searchRes as $result)
                                         <tr class="gradeX">
+
                                             <th><input type="checkbox" name="transID[]" value="{{$result->id}}"></th>
                                             <input type="hidden" name="storeID" value="{{$result->store_id}}">
                                             <td>{{$result->transactionID}}</td>
@@ -62,8 +69,16 @@
             </div>
         </div>
     </section>
-
+    <script>
+        $(document).ready(function() {
+            $('#select-all').click(function() {
+                $('input[type="checkbox"]').prop('checked', this.checked);
+            })
+        });
+    </script>
 @endsection
+
+
 
 
 
