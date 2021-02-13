@@ -11,6 +11,8 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TransactionController extends Controller
 {
@@ -24,9 +26,21 @@ class TransactionController extends Controller
 
         $this->vat_tax_calculation();
         \LogActivity::addToLog('Transaction Viewed');
+        if (Gate::allows('isSuperAdmin')) {
+            $transactions = Transaction::all();
+            return view('transaction.view', compact('transactions'));
 
-        $transactions = Transaction::all();
-        return view('transaction.view', compact('transactions'));
+        }
+        elseif (Gate::allows('isAdmin')) {
+            $transactions = Transaction::all();
+            return view('transaction.view', compact('transactions'));
+
+        }
+        elseif (Gate::allows('isOperator')) {
+            $transactions = Transaction::all();
+            return view('transaction.view', compact('transactions'));
+
+        }
     }
 
     /**
@@ -67,7 +81,7 @@ class TransactionController extends Controller
 
         $invoiceNO = Carbon::parse()->nowWithSameTz()->format('ydmhm');
 
-        $updateBalance = Store::find($request->storeLocation)->balance+$request->finalPayable ;
+        $updateBalance = Store::find($request->storeLocation)->balance + $request->finalPayable;
 
 
         if ($getCustomerInfo == NULL) {
@@ -88,7 +102,7 @@ class TransactionController extends Controller
             $customerId = $customer->id;
         }
 
-        return $this->saveTransaction($customerId, $transactionID,$invoiceNO, $request, $updateBalance);
+        return $this->saveTransaction($customerId, $transactionID, $invoiceNO, $request, $updateBalance);
 
     }
 
@@ -104,19 +118,19 @@ class TransactionController extends Controller
         //
     }
 
-    public function saveTransaction($customerId, $transactionID,$invoiceNO, $request, $updateBalance)
+    public function saveTransaction($customerId, $transactionID, $invoiceNO, $request, $updateBalance)
     {
         $Transaction = new Transaction();
-        $Transaction->store_id =$request->state;
+        $Transaction->store_id = $request->state;
         $Transaction->transactionID = $transactionID;
-        $Transaction->location_id =  $request->storeLocation;
+        $Transaction->location_id = $request->storeLocation;
         $Transaction->customer_id = $customerId;
         $Transaction->final_payable = $request->finalPayable;
         $Transaction->cardNo = $request->cardNo;
         $Transaction->cardType = $request->cardType;
         $Transaction->apprCode = $request->apprCode;
         $Transaction->dateTime = $request->dateTime;
-        $Transaction->invoice_no = $request->storeLocation.$invoiceNO;
+        $Transaction->invoice_no = $request->storeLocation . $invoiceNO;
         $Transaction->save();
 
         Store::where('id', $request->storeLocation)
@@ -203,6 +217,7 @@ class TransactionController extends Controller
         //return $trans;
         return view('print', compact('trans'));
     }
+
     public function vat_tax_calculation()
     {
         return 1;

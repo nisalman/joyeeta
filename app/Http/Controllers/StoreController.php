@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFormRequest;
 use App\location;
 use App\Store;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,7 +40,6 @@ class StoreController extends Controller
         $allLocations= location::all();
         /*return Store::find(1)->location;
         return Store::find($locationData->id);*/
-
 
         return view('store.create', compact('locationData','allLocations'));
     }

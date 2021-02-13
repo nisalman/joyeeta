@@ -14,13 +14,12 @@
 
                     <div class="card-body">
                         Batch ID: {{$request->batchID}}<br>
-                        Transaction ID: {{$request->transactionID}}<br>
-                        Store ID: {{$request->storeID}}<br>
+                        Store ID: {{$storeName}}<br>
                         Total amount: {{$request->totalAmount}}<br>
                         <form action="{{ route('disbursement.confirmation') }}" enctype="multipart/form-data" method="post">
                             {{ method_field('post') }}
                             @csrf
-                            Proof:<br><input type="file" name="image"> <br><br>
+                            Image:<br><input type="file" name="image"> <br><br>
                         Comment:<br><textarea name="comment" cols="38" rows="4"></textarea> <br>
                         <input type="hidden" name="batchID" value="{{$request->batchID}}">
                         <input type="hidden" name="transactionID" value="{{$request->transactionID}}">

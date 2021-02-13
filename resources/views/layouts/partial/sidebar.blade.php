@@ -9,7 +9,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-
+            @can('isSuperAdmin')
             <li class="sub-menu">
                 <a href="javascript:;" class=" {{ Request::is('admin/location*') ? 'active': '' }}">
                     <i class="fa fa-location-arrow"></i>
@@ -20,6 +20,7 @@
                     <li><a  href="{{route('location.index')}}">All store</a></li>
                 </ul>
             </li>
+            @endcan
             <li class="sub-menu">
                 <a href="javascript:;" class=" {{ Request::is('admin/store*') ? 'active': '' }}">
                     <i class="fa fa-shopping-cart"></i>
@@ -40,6 +41,7 @@
                     <li><a  href="{{route('transaction.index')}}">All Transaction</a></li>
                 </ul>
             </li>
+            @can('isSuperAdmin')
             <li class=" sub-menu">
                 <a href="javascript:;" class=" {{ Request::is('admin/disbursement*') ? 'active': '' }}">
                     <i class="fa fa-money"></i>
@@ -76,9 +78,7 @@
                         <li><a  href="{{route('logActivity')}}">Activity Log</a></li>
                     </ul>
                 </li>
-
-
-
+            @endcan
         </ul>
         <!-- sidebar menu end-->
     </div>

@@ -26,14 +26,16 @@ class DisbursementController extends Controller
         \LogActivity::addToLog('Disbursement Clicked');
 
 
-        $disbursements = Disbursement::all()->sortByDesc('id');
+        $disbursements = Disbursement::all()->where('is_disbursement', '0')->sortByDesc('id');
         return view('disbursement.view', compact('disbursements'));
 
     }
 
     public function batchList()
     {
-        $transData = Transaction::whereNotNull('batch_id')->get();
+        $transData = Transaction::whereNotNull('batch_id')
+            ->where('is_disburse', '0')
+            ->get();
         $groupTrans = $transData->groupBy('batch_id');
 
         $trans = [];
@@ -67,11 +69,14 @@ class DisbursementController extends Controller
 
     public function batchPayment(Request $request)
     {
+        //return $request;
+       $storeName = Store::find($request->storeID)->name;
         $commission = Setting::find(1)->commission;
         $commissionAmount = ($request->totalAmount * $commission) / 100;
         $netPayable = $request->totalAmount - $commissionAmount;
         Transaction::where('batch_id', $request->batchID)->update(['is_disburse' => '1']);
-        return view('disbursement.final_disbursement', compact('request', 'netPayable', 'commissionAmount'));
+        Disbursement::where('disburse_id', $request->batchID)->update(['is_disbursement' => '1']);
+        return view('disbursement.final_disbursement', compact('request', 'netPayable', 'commissionAmount', 'storeName'));
 
     }
 
