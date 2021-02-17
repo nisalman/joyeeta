@@ -16,6 +16,8 @@
                                 <thead>
                                 <tr>
                                     <th>Batch ID</th>
+                                    <th>Location</th>
+                                    <th>Store Name</th>
                                     <th>Paid Amount</th>
                                     <th>Payment Detail</th>
                                     <th>Net Payable</th>
@@ -32,6 +34,8 @@
                                     <tr class="gradeX">
                                         <td><a href="{{route('disbursement.batchDetail',$key)}}"
                                                style="color: red"> {{$key}}</a></td>
+                                        <td>{{ \App\Store::find($batchTran['store_id'])->location->name}}</td>
+                                        <td>{{ \App\Store::find($batchTran['store_id'])->name}}</td>
                                         <td>{{$batchTran['total_pay']}}</td>
                                         <td>{{Carbon\Carbon::parse($batchTran['fromDate'])->format('Y m d')}}</td>
                                         <td>{{Carbon\Carbon::parse($batchTran['fromDate'])}}</td>

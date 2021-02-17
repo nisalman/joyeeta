@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Disbursement;
 Use App\Http\Controllers\Auth;
 
+use App\location;
+use App\Store;
+use App\Transaction;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -28,7 +32,21 @@ class HomeController extends Controller
     }
     public function superAdminHome()
     {
-        return view('admin.home');
+        $adminCount=[];
+        $adminCount['location']=location::all()->count();
+        $adminCount['store']=Store::all()->count();
+        $adminCount['transaction']=Transaction::all()->count();
+        $adminCount['disbursement'] =Disbursement::all()->count();
+
+        /*$otherCount=[];
+        $userLocation = location::where('admin_id', userId())->first();
+        $userStoreCount= $userLocation->Store->count();
+        return $userStoreCount= $userLocation->transaction->count();
+        //$otherCount['store']=Tra::find(userId())->count();
+        $otherCount['transaction']=Transaction::all()->count();
+        $otherCount['disbursement'] =Disbursement::all()->count();*/
+
+        return view('admin.home', compact('adminCount'));
     }
     public function localAdminHome()
     {

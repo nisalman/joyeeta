@@ -16,17 +16,18 @@
                         Batch ID: {{$request->batchID}}<br>
                         Store ID: {{$storeName}}<br>
                         Total amount: {{$request->totalAmount}}<br>
-                        <form action="{{ route('disbursement.confirmation') }}" enctype="multipart/form-data" method="post">
+                        <form action="{{ route('disbursement.confirmation') }}" enctype="multipart/form-data"
+                              method="post">
                             {{ method_field('post') }}
                             @csrf
                             Image:<br><input type="file" name="image"> <br><br>
-                        Comment:<br><textarea name="comment" cols="38" rows="4"></textarea> <br>
-                        <input type="hidden" name="batchID" value="{{$request->batchID}}">
-                        <input type="hidden" name="transactionID" value="{{$request->transactionID}}">
-                        <input type="hidden" name="storeID" value="{{$request->storeID}}">
-                        <input type="hidden" name="totalAmount" value="{{$request->totalAmount}}">
-                        <input type="hidden" name="commissionAmount" value="{{$commissionAmount}}">
-                        <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                            Comment:<br><textarea name="comment" cols="38" rows="4"></textarea> <br>
+                            <input type="hidden" name="batchID" value="{{$request->batchID}}">
+                            <input type="hidden" name="transactionID" value="{{$request->transactionID}}">
+                            <input type="hidden" name="storeID" value="{{$request->storeID}}">
+                            <input type="hidden" name="totalAmount" value="{{$request->totalAmount}}">
+                            <input type="hidden" name="commissionAmount" value="{{$commissionAmount}}">
+                            <button type="submit" class="btn btn-sm btn-success">Submit</button>
                         </form>
 
                     </div>

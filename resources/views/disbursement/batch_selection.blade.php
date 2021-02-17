@@ -14,16 +14,24 @@
                         @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             @include('disbursement.search')
-
-                            @if(count($searchRes)==0)
-                                @php
-                                    toastr()->warning('No data found, try again', 'Sorry')
-                                @endphp
-                            @endif
                             {!! Form::open(['route' => 'disbursement.batch'], ['method'=>'post']) !!}
+                            <button class="btn btn-info">Submit</button>
+                            <h6 style="float: right; color: #55bc55">
+                                @if(count($searchRes)==0)
+                                    @php
+                                        toastr()->warning('No data found, try again', 'Sorry');
+                                    echo 'No result found';
+                                    @endphp
+                                @else
+                                    @php
+                                        echo count($searchRes).' '.'results found for'.' '.$storeId->name.','.$storeId->location->name.' from '.$fromDate.' to '.$toDate;
+                                    @endphp
+                                @endif
+                            </h6><br>
 
+
+                            <br>
                             <div class="adv-table">
-                                <button class="btn btn-info">Submit</button>
                                 <table class="display table table-bordered table-striped">
                                     <thead>
                                     <tr>
@@ -70,8 +78,8 @@
         </div>
     </section>
     <script>
-        $(document).ready(function() {
-            $('#select-all').click(function() {
+        $(document).ready(function () {
+            $('#select-all').click(function () {
                 $('input[type="checkbox"]').prop('checked', this.checked);
             })
         });

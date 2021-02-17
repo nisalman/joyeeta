@@ -22,4 +22,5 @@ class location extends Model
     {
         return $this->hasMany(Store::class);
     }
+
 }

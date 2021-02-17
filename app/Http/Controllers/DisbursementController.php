@@ -26,7 +26,7 @@ class DisbursementController extends Controller
         \LogActivity::addToLog('Disbursement Clicked');
 
 
-        $disbursements = Disbursement::all()->where('is_disbursement', '0')->sortByDesc('id');
+        $disbursements = Disbursement::where('is_disbursement', '1')->get();
         return view('disbursement.view', compact('disbursements'));
 
     }
@@ -36,7 +36,7 @@ class DisbursementController extends Controller
         $transData = Transaction::whereNotNull('batch_id')
             ->where('is_disburse', '0')
             ->get();
-        $groupTrans = $transData->groupBy('batch_id');
+         $groupTrans = $transData->groupBy('batch_id');
 
         $trans = [];
 
@@ -55,8 +55,8 @@ class DisbursementController extends Controller
             $trans[$keys]['transactionID'] = $tran->transactionID;
             $trans[$keys]['fromDate'] = $froupTran->min('created_at');
             $trans[$keys]['toDate'] = $froupTran->max('created_at');
-
         }
+
 
         return view('disbursement.batchList', compact('trans'))->with('successMsg', 'Batch Successfully created');
     }
@@ -64,6 +64,7 @@ class DisbursementController extends Controller
     public function batchDetail($id)
     {
         $batchTransaction = Transaction::where('batch_id', $id)->get();
+
         return view('disbursement.batch_detail', compact('batchTransaction'));
     }
 
@@ -74,8 +75,8 @@ class DisbursementController extends Controller
         $commission = Setting::find(1)->commission;
         $commissionAmount = ($request->totalAmount * $commission) / 100;
         $netPayable = $request->totalAmount - $commissionAmount;
-        Transaction::where('batch_id', $request->batchID)->update(['is_disburse' => '1']);
-        Disbursement::where('disburse_id', $request->batchID)->update(['is_disbursement' => '1']);
+        /*Transaction::where('batch_id', $request->batchID)->update(['is_disburse' => '1']);
+        Disbursement::where('disburse_id', $request->batchID)->update(['is_disbursement' => '1']);*/
         return view('disbursement.final_disbursement', compact('request', 'netPayable', 'commissionAmount', 'storeName'));
 
     }
@@ -114,6 +115,10 @@ class DisbursementController extends Controller
      */
     public function store(Request $request)
     {
+        //return $request;
+        $storeId = Store::find($request->storeId);
+        $fromDate = Carbon::parse($request->from)->format('d-m-y');
+        $toDate = Carbon::parse($request->to)->format('d-m-y');
 
         $locationData = location::where('admin_id', userType())
             ->first();
@@ -123,23 +128,25 @@ class DisbursementController extends Controller
         $storeList = Store::select('id', 'name')
             ->get();
 
-         $searchRes = Transaction::where('store_id', $request->storeId)
+         $search = Transaction::where('store_id', $request->storeId)
             ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
-            ->where('is_disburse', '0')->get();
+            ->where('is_disburse', '0')
+             ->whereNull('batch_id');
+             $searchRes=$search->get();
 
 
-        $searchSum = Transaction::where('store_id', $request->storeLocation)
-            ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
-            ->where('is_disburse', '0')->sum('final_payable');
+        $searchSum = $search->sum('final_payable');
 
         return view('disbursement.batch_selection', compact('searchRes',
-            'locationData', 'allLocation', 'storeList', 'searchSum'));
+                    'locationData', 'allLocation', 'storeList', 'searchSum','storeId',
+                     'fromDate', 'toDate'));
 
 
     }
 
     public function batchDisburse(Request $request)
     {
+
         $transID = $request->transID;
 
         $nullChecking = [];
@@ -148,10 +155,9 @@ class DisbursementController extends Controller
             if ($transTableData->batch_id == null or $transTableData->batch_id == "") {
                 $nullChecking[$i] = $transTableData->id;
             } else {
-                toastr()->warning('Transaction id ' . $transTableData->transactionID . 'is already exist at ' . $transTableData->batch_id, 'Stop!');
-                // return redirect()->back()->with('error', 'Already in a batch');
+                toastr()->warning('Transaction id ' . $transTableData->transactionID . ' is already exist at ' . $transTableData->batch_id, 'Stop!');
+                return $this->create();
             }
-
 
         }
 
@@ -312,11 +318,9 @@ class DisbursementController extends Controller
         $Disbursement->net_payable = $request->totalAmount;
         $Disbursement->image = $imagename;
         // return $Disbursement;
-        Transaction::where('batch_id', $request->batchID)
-            ->update([
-                'is_disburse' => 1
-            ]);
         $Disbursement->save();
+        Transaction::where('batch_id', $request->batchID)->update(['is_disburse' => '1']);
+        Disbursement::where('disburse_id', $request->batchID)->update(['is_disbursement' => '1']);
         return $this->index()->with('successMsg', 'Batch Successfully disbursed');
     }
 

@@ -110,7 +110,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avatar-mini.jpg')}}"></span>
+                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avater_new.png')}}"></span>
                             <span class="subject">
                                     <span class="from">Jonathan Smith</span>
                                     <span class="time">Just now</span>
@@ -122,7 +122,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avatar-mini2.jpg')}}"></span>
+                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avater_new.png')}}"></span>
                             <span class="subject">
                                     <span class="from">Admin</span>
                                     <span class="time">10 mins</span>
@@ -134,7 +134,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avatar-mini3.jpg')}}"></span>
+                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avater_new.png')}}"></span>
                             <span class="subject">
                                     <span class="from">Jason Stathum</span>
                                     <span class="time">3 hrs</span>
@@ -146,7 +146,7 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avatar-mini4.jpg')}}"></span>
+                            <span class="photo"><img alt="avatar" src="{{asset('admin/img/avater_new.png')}}"></span>
                             <span class="subject">
                                     <span class="from">Jondi Rose</span>
                                     <span class="time">Just now</span>

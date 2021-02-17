@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="row invoice-list">
                         <div class="col-md-12 text-center corporate-id">
-                            <img src="{{asset('admin/img/Joyeeta.png')}}" height="55px" width="110px" alt="">
+                            <img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}" height="95px" width="95px" alt="">
                         </div>
                         <div class="col-lg-4 col-sm-4">
                             <h4>Billing From</h4>
@@ -25,9 +25,9 @@
                         <div class="col-lg-4 col-sm-4">
                             <h4>Billing Customer</h4>
                             <p>
-                                {{$trans->customerName}}<br>
-                                {{$trans->country_name}}<br>
-                                {{$trans->customerName}}<br>
+                                {{$customer->name}}<br>
+                                {{$customer->mobile}}<br>
+                                {{$customer->address}}<br>
                             </p>
                         </div>
                         <div class="col-lg-4 col-sm-4">
@@ -55,17 +55,17 @@
                             <td>#</td>
                             <td>{{$trans->transactionID}}</td>
                             <td class="hidden-phone">{{$trans->store_name}}</td>
-                            <td>$ 2000</td>
+                            <td>{{$trans->finalPayable}}</td>
                         </tr>
                         </tbody>
                     </table>
                     <div class="row justify-content-end">
                         <div class="col-lg-4 invoice-block ">
                             <ul class="unstyled amounts">
-                                <li><strong>Sub - Total amount :</strong> $6820</li>
-                                <li><strong>Discount :</strong> 10%</li>
-                                <li><strong>VAT :</strong> -----</li>
-                                <li><strong>Grand Total :</strong> $6138</li>
+                                <li><strong>Sub - Total amount :</strong> {{$trans->finalPayable}}</li>
+                                <li><strong>Discount :</strong> 0%</li>
+                                <li><strong>VAT :</strong> 0%</li>
+                                <li><strong>Grand Total :</strong> {{$trans->finalPayable}}</li>
                             </ul>
                         </div>
                     </div>

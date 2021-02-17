@@ -38,8 +38,8 @@
                                            <a href="{{route('location.edit', $location->id)}}">
                                                <button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button>
                                            </a>
-                                            <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i>
-                                            </button>
+                                           {{-- <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i>
+                                            </button>--}}
                                         </td>
                                     </tr>
                                 @endforeach

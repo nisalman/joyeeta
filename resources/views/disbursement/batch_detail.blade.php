@@ -19,8 +19,7 @@
                                     <tr>
                                         <th>Transaction ID</th>
                                         <th>Disbursement</th>
-                                        <th>Date</th>
-                                        <th>Amount</th>
+                                        <th>TransactionDate</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -30,7 +29,6 @@
                                             <td>{{$transaction->transactionID}}</td>
                                             <td>{{$transaction->final_payable}}</td>
                                             <td>{{ Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y') }}</td>
-                                            <td style="text-align: right">{{$transaction->is_disburse}}</td>
                                         </tr>
                                     @endforeach
 

@@ -42,6 +42,10 @@ class User extends Authenticatable
     }
     public function operator()
     {
-        return $this->hasOne(location::class);
+        return $this->hasOne(location::class, 'operator_id');
+    }
+    public function location()
+    {
+        return $this->hasOne(location::class, 'id');
     }
 }

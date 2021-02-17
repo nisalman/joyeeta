@@ -38,6 +38,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
 
     Route::get('check-number/{number}', 'CustomerController@checkNumber');
     Route::get('transaction/getStores/{id}','TransactionController@getStorebyLocation');
+    Route::post('transaction/search','TransactionController@search')->name('transaction.search');
 
     Route::get('disbursement/make-batch','DisbursementController@getSearchResult');
     Route::post('disbursement/batch-disburse','DisbursementController@batchDisburse')->name('disbursement.batch');

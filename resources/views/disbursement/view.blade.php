@@ -23,7 +23,7 @@
                                     <th>Comment</th>
                                     <th>Date</th>
 
-{{--                                    <th class="hidden-phone">Disbursement</th>--}}
+                                    {{--                                    <th class="hidden-phone">Disbursement</th>--}}
                                     {{--@can('isSuperAdmin')
                                     <th>Action</th>
                                     @endcan--}}
@@ -39,7 +39,15 @@
                                         <td>{{$disbursement->store->name}}</td>
                                         <td>{{$disbursement->net_payable}}</td>
                                         <td>{{$disbursement->commission_amount}}</td>
-                                        <td><img src="{{asset('uploads/'.$disbursement->image)}}" width="40" height="40"></td>
+                                        <td>
+                                            @if($disbursement->image==null)
+                                                <img src="{{asset('uploads/no_image.png')}}" width="40"
+                                                     height="40">
+                                            @else
+                                                <img src="{{asset('uploads/'.$disbursement->image)}}" width="40"
+                                                     height="40">
+                                            @endif
+                                            </td>
                                         <td>{{$disbursement->comment}}</td>
                                         <td class="center hidden-phone">
                                             {{ Carbon\Carbon::parse($disbursement->created_at)->format('d/m/Y') }}
@@ -79,7 +87,8 @@
                         </div>
                     </div>
                 </section>
-                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

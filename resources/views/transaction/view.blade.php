@@ -8,10 +8,10 @@
                     <header class="card-header">
                         Advanced Table
                     </header>
-
+{{--                    @include('transaction.search')--}}
                     <div class="card-body">
                         <div class="adv-table">
-                            <table class="display table table-bordered table-striped" id="dynamic-table">
+                            <table class="display table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>Trans ID</th>
@@ -53,6 +53,7 @@
                         </div>
                     </div>
                 </section>
+    {!! $transactions->links() !!}
 
 @endsection
 

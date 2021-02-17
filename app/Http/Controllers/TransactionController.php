@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Yoeunes\Toastr\Facades\Toastr;
 
 class TransactionController extends Controller
 {
@@ -27,20 +28,37 @@ class TransactionController extends Controller
         $this->vat_tax_calculation();
         \LogActivity::addToLog('Transaction Viewed');
         if (Gate::allows('isSuperAdmin')) {
+            $transactions = Transaction::paginate(10);
+            $allLocation = location::all();
+
+            return view('transaction.view', compact('transactions', 'allLocation'));
+
+        } elseif (Gate::allows('isAdmin')) {
+            $transactions = Transaction::all();
+            return view('transaction.view', compact('transactions'));
+
+        } elseif (Gate::allows('isOperator')) {
             $transactions = Transaction::all();
             return view('transaction.view', compact('transactions'));
 
         }
-        elseif (Gate::allows('isAdmin')) {
-            $transactions = Transaction::all();
-            return view('transaction.view', compact('transactions'));
+    }
 
-        }
-        elseif (Gate::allows('isOperator')) {
-            $transactions = Transaction::all();
-            return view('transaction.view', compact('transactions'));
+    public function search(Request $request)
+    {
+        $cus = Customer::where('mobile', $request->number)->first();
 
+        if (isset($request->transId)) {
+            return Transaction::where('transactionID', $request->transId)->get();
+        } else {
+            return Transaction::Where('location_id', $request->storeLocation)
+                ->orWhere('store_id', $request->storeId)
+                ->orWhere('is_disburse', $request->isDisbursed)
+                ->orWhere('customer_id', $cus->id)
+                ->orwhereBetween('created_at', [$request->from . '%', $request->to . '%'])
+                ->get();
         }
+
     }
 
     /**
@@ -50,11 +68,17 @@ class TransactionController extends Controller
      */
     public function create()
     {
+
+
         \LogActivity::addToLog('Transaction Create Clicked');
 
         $locationData = location::where('admin_id', userType())->first();
+        if (userType() == 3) {
+            $locationData = location::where('operator_id', Auth::user()->id)->first();
+        }
         $shopData = Store::where('location_id', $locationData->id)->get();
         $allLocation = location::all();
+
 
         return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
     }
@@ -72,6 +96,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        return $request;
 
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
         $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
@@ -104,7 +129,8 @@ class TransactionController extends Controller
 
         return $this->saveTransaction($customerId, $transactionID, $invoiceNO, $request, $updateBalance);
 
-    }
+         }
+
 
 
     /**
@@ -118,10 +144,11 @@ class TransactionController extends Controller
         //
     }
 
-    public function saveTransaction($customerId, $transactionID, $invoiceNO, $request, $updateBalance)
+    public function saveTransaction($customerId, $transactionID, $invoiceNO,  $request, $updateBalance)
     {
+        //return $request;
         $Transaction = new Transaction();
-        $Transaction->store_id = $request->state;
+        $Transaction->store_id = $request->store_id;
         $Transaction->transactionID = $transactionID;
         $Transaction->location_id = $request->storeLocation;
         $Transaction->customer_id = $customerId;
@@ -199,13 +226,14 @@ class TransactionController extends Controller
 
     public function getStorebyLocation($id)
     {
-        $states = DB::table("stores")->where("location_id", $id)->pluck("name", "id");
-        return json_encode($states);
+        $store_ids = DB::table("stores")->where("location_id", $id)->pluck("name", "id");
+        return json_encode($store_ids);
     }
 
     public function print($request, $Transaction)
     {
         $trans = $request;
+        $customer = Customer::where('mobile',$request->country_name)->first();
         $trans['transactionID'] = $Transaction->transactionID;
 
         $store = Store::find($trans->storeLocation)->first();
@@ -215,7 +243,7 @@ class TransactionController extends Controller
         $trans['invoice_no'] = $Transaction->invoice_no;
 
         //return $trans;
-        return view('print', compact('trans'));
+        return view('print', compact('trans','customer'));
     }
 
     public function vat_tax_calculation()

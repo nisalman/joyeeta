@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Transaction;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class TransactionFormRequest extends FormRequest
 {
@@ -29,29 +30,32 @@ class TransactionFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'customerName' => 'required',
+            'storeLocation' => 'required|not_in:0',
+            'store_id' => 'required|not_in:0',
             'country_name' => 'required',
+            'customerName' => 'required',
             'customerAddress' => 'required',
-            'storeNumber' => 'required',
-            'contactName' => 'required',
-            'netAmount' => 'required',
-            'discount' => 'required',
-            'coupon' => 'required',
             'finalPayable' => 'required',
+            'cardNo' => 'required',
+            'cardType' => 'required|not_in:0',
+            'apprCode' => 'required',
+            'dateTime' => 'required',
+
         ];
     }
     public function messages()
     {
         return [
+            'storeLocation.required' => 'Select Location',
+            'store_id.required' => 'Select Store',
+            'country_name.required' => 'Insert Customer Number',
             'customerName.required' => 'Give a name of Customer',
-            'country_name.required' => 'Insert Mobile number',
             'customerAddress.required' => 'Insert Customer address.',
-            'storeNumber.required' => 'Select Store',
-            'contactName.required' => 'Insert contact number',
-            'netAmount.required' => 'Insert net amount',
-            'discount.required' => 'Insert discount',
-            'coupon.required' => 'Insert coupon',
-            'finalPayable.required' => 'Insert final payable amount',
+            'contactName.required' => 'Insert customer name',
+            'cardType.required' => 'Select card type',
+            'cardNo.required' => 'Insert card no',
+            'apprCode.required' => 'Insert appr code',
+            'dateTime.required' => 'Insert Date',
         ];
     }
 }

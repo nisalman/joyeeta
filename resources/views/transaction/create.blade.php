@@ -8,18 +8,18 @@
                     <header class="card-header">
                         Transaction
                     </header>
+
                     <div class="col-lg-12">
                         @include('layouts.partial.validationMessage')
                         <div class="card-body">
                             {!! Form::open(['route' => 'transaction.store'], ['method'=>'post']) !!}
 
-                            @can('isSuperAdmin')
-
+                            @can('isSuperAdmin','isAdmin')
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Location</label>
                                     <div class="col-sm-4">
                                         <select class="form-control form-control-sm mb-2" name="storeLocation">
-                                            <option> Select Location</option>
+                                            <option value="0"> Select Location</option>
                                             @foreach($allLocation as $location)
                                                 <option value="{{$location->id}}"> {{$location->name}} </option>
                                             @endforeach
@@ -28,18 +28,26 @@
 
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Store</label>
                                     <div class="col-sm-4">
-                                        <select name="state" class="form-control">
-                                            <option>--Select Store--</option>
+                                        <select name="store_id" class="form-control">
+                                            <option value="0">--Select Store--</option>
                                         </select>
                                     </div>
                                 </div>
                             @endcan
-                            @cannot('isSuperAdmin')
+                            @cannot('isSuperAdmin', 'isAdmin')
                                 <div class="form-group row">
-                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Location</label>
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Location:</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control form-control-sm mb-1" name="storeLocation">
-                                            <option> Select Location</option>
+                                        <input type="hidden" name="storeLocation" value="{{\App\User::find(userId())->operator->id}}" id="storeLocation" class="form-control"/ >
+                                        @php
+                                            echo \App\User::find(userId())->operator->name;
+                                        @endphp
+                                    </div>
+
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">Store</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control form-control-sm mb-1" name="store_id">
+                                            <option> Select Store</option>
                                             @foreach($shopData as $shop)
                                                 <option value="{{$shop->id}}"> {{$shop->name}} </option>
                                             @endforeach
@@ -82,7 +90,7 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Card Type</label>
                                 <div class="col-sm-4">
                                     <select class="form-control form-control-sm mb-2" name="cardType">
-                                        <option >Select Card Type</option>
+                                        <option value="0">Select Card Type</option>
                                         <option value="1"> Amex</option>
                                         <option value="2"> Visa</option>
                                         <option value="3"> Master </option>
@@ -99,7 +107,7 @@
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" name="apprCode">
                                 </div>
-                                <label for="inputPassword3" class="col-sm-2 col-form-label">Date Time
+                                <label for="inputPassword3" class="col-sm-2 col-form-label" id="myDate">Date Time
                                 </label>
                                 <div class="col-sm-4">
                                     <input type="datetime-local" class="form-control" name="dateTime">
@@ -132,6 +140,7 @@
 
 @endsection
 <script src="{{asset('admin/js/jquery.js')}}"></script>
+
 <script>
     $(document).ready(function () {
         $('#country_name').keyup(function () {
@@ -198,14 +207,14 @@
                     dataType: "json",
                     success: function (data) {
                         console.log(data);
-                        jQuery('select[name="state"]').empty();
+                        jQuery('select[name="store_id"]').empty();
                         jQuery.each(data, function (key, value) {
-                            $('select[name="state"]').append('<option value="' + key + '">' + value + '</option>');
+                            $('select[name="store_id"]').append('<option value="' + key + '">' + value + '</option>');
                         });
                     }
                 });
             } else {
-                $('select[name="state"]').empty();
+                $('select[name="store_id"]').empty();
             }
         });
     });
