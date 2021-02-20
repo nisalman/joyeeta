@@ -20,9 +20,9 @@
     </div>
     <div class="col-lg-5 col-md-12 col-sm-12">
         <div class="input-group" data-date="12/07/2017" data-date-format="mm/dd/yyyy">
-            <input type="date" class="form-control rounded dpd1" placeholder="from date" name="from">
+            <input type="datetime-local"  class="form-control" placeholder="from date" name="from">
             <span class="px-3 py-2">To</span>
-            <input type="date" class="form-control rounded dpd2" name="to">
+            <input type="datetime-local" class="form-control rounded dpd2" name="to">
         </div>
     </div>
     <div class="col-lg-1 col-md-12 col-sm-12">

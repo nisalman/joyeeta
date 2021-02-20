@@ -132,13 +132,11 @@
                 </div>
             </form>
 
-
         </div>
-
+        <br>
     </div>
     <div class="logoSet">
-        <img height="90px" width="300px" src="{{asset('login_asset/images/a2i-Logo-set.png')}}">
-
+        <img src="{{asset('admin/img/ekshop.jpg')}}" height="35px" width="50px">
     </div>
 </div>
 

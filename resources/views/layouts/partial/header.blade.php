@@ -228,24 +228,17 @@
             <!-- user login dropdown start-->
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <img alt="" src="{{asset('admin/img/avatar1_small.jpg')}}">
+{{--                    <img alt="" src="{{asset('admin/img/avatar1_small.jpg')}}">--}}
                     <span class="username">
-                        Admin
-                        {{--@if($userType==1)
-                            Super Admin
-                        @elseif($userType==2)
-                            Admin
-                        @else
-                            Operator
-                            @endif--}}
+                       {{\Illuminate\Support\Facades\Auth::user()->role_name}}
                     </span>
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu extended logout dropdown-menu-right">
                     <div class="log-arrow-up"></div>
-                    <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                    {{--<li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
                     <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-                    <li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>
+                    <li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>--}}
                     <li><a href="{{url('logout')}}"><i class="fa fa-key"></i> Log Out</a></li>
                 </ul>
             </li>

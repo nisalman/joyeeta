@@ -25,7 +25,6 @@ class DisbursementController extends Controller
         //return Disbursement::find(2)->store->name;
         \LogActivity::addToLog('Disbursement Clicked');
 
-
         $disbursements = Disbursement::where('is_disbursement', '1')->get();
         return view('disbursement.view', compact('disbursements'));
 
@@ -35,8 +34,9 @@ class DisbursementController extends Controller
     {
         $transData = Transaction::whereNotNull('batch_id')
             ->where('is_disburse', '0')
+            ->where('is_cancelled', '0')
             ->get();
-         $groupTrans = $transData->groupBy('batch_id');
+        $groupTrans = $transData->groupBy('batch_id');
 
         $trans = [];
 
@@ -71,7 +71,7 @@ class DisbursementController extends Controller
     public function batchPayment(Request $request)
     {
         //return $request;
-       $storeName = Store::find($request->storeID)->name;
+        $storeName = Store::find($request->storeID)->name;
         $commission = Setting::find(1)->commission;
         $commissionAmount = ($request->totalAmount * $commission) / 100;
         $netPayable = $request->totalAmount - $commissionAmount;
@@ -113,7 +113,7 @@ class DisbursementController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DisbursementFormRequest $request)
     {
         //return $request;
         $storeId = Store::find($request->storeId);
@@ -128,18 +128,19 @@ class DisbursementController extends Controller
         $storeList = Store::select('id', 'name')
             ->get();
 
-         $search = Transaction::where('store_id', $request->storeId)
-            ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
+        $search = Transaction::where('store_id', $request->storeId)
+            ->whereBetween('created_at', [$request->from , $request->to ])
             ->where('is_disburse', '0')
-             ->whereNull('batch_id');
-             $searchRes=$search->get();
+            ->where('is_cancelled', '0')
+            ->whereNull('batch_id');
+        $searchRes = $search->get();
 
 
         $searchSum = $search->sum('final_payable');
 
         return view('disbursement.batch_selection', compact('searchRes',
-                    'locationData', 'allLocation', 'storeList', 'searchSum','storeId',
-                     'fromDate', 'toDate'));
+            'locationData', 'allLocation', 'storeList', 'searchSum', 'storeId',
+            'fromDate', 'toDate'));
 
 
     }
@@ -172,27 +173,6 @@ class DisbursementController extends Controller
         }
 
         return $this->batchList();
-        /*$transData = Transaction::where('id', $request->transID);
-        $getExistingBatchs = $transData->select('batch_id')->get();
-        $nullFieldCheck = $getExistingBatchs = $transData->where('batch_id', null)->orWhere('batch_id', '')->get();*/
-
-
-        /*        foreach ($getExistingBatchs as $existingBatch) {
-                    echo $existingBatch->batch_id . '<br>';
-        //            if (empty($existingBatch->batch_id)) {
-        //                return $existingBatch->batch_id;
-        //                // return view('disbursement.view')->with('error', 'Batch already created for this transaction');
-        //            } else {
-        //                return "Not";
-        //            }
-                }*/
-
-
-//        $transData->update(['batch_id' => $batchId]);
-//        return;
-//        //return $this->batchDisburse()->with('successMsg', 'Batch already created for this transaction');
-//        return view('disbursement.view')->with('successMsg', 'Batch already created for this transaction');
-
     }
 
     /**
@@ -237,7 +217,8 @@ class DisbursementController extends Controller
 
         $transactionQuery = Transaction::where('store_id', $request->storeId)
             ->whereBetween('created_at', [$request->from . '%', $request->to . '%'])
-            ->where('is_disburse', 0);
+            ->where('is_disburse', 0)
+            ->where('is_cancelled', '0');
         if ($transactionQuery == NULL) {
             return 'null';
         }

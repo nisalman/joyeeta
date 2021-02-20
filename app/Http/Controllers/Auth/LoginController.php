@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Yoeunes\Toastr\Toastr;
+
 class LoginController extends Controller
 {
     /*
@@ -60,9 +62,11 @@ class LoginController extends Controller
             }
             else
             {
+                Toastr()->error('Wrong');
                 return 'You have not admin access';
             }
         }else{
+            Toastr()->error('Wrong');
             return redirect()->route('login')
                 ->with('error','Email-Address And Password Are Wrong.');
         }

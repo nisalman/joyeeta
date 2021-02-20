@@ -37,7 +37,7 @@ class AuthServiceProvider extends ServiceProvider
 
         /* define a operator role */
         Gate::define('isOperator', function($user) {
-            return $user->user_role_id = 3;
+            return $user->user_role_id == 3;
         });
 
     }

@@ -26,6 +26,7 @@ class DisbursementFormRequest extends FormRequest
     public function rules()
     {
         return [
+            'storeLocation' => 'required',
             'storeId' => 'required',
             'from' => 'required',
             'to' => 'required',
@@ -35,6 +36,7 @@ class DisbursementFormRequest extends FormRequest
     public function messages()
     {
         return [
+            'storeLocation.required' => 'Select Location',
             'storeId.required' => 'Select store',
             'from.required' => 'Select date from',
             'to.required' => 'Select to date',

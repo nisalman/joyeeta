@@ -80,7 +80,7 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Final Payable
                                     Amount</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="finalPayable">
+                                    <input type="number" class="form-control" name="finalPayable">
                                 </div>
                             </div>
 
@@ -184,8 +184,8 @@
                         $("#cusStatus").css({"visibility": "hidden"});
                         $("#customerName").val(data.name);
                         $("#customerAddress").val(data.address);
-                        $("#customerName").prop('disabled', true);
-                        $("#customerAddress").prop('disabled', true);
+                        $("#customerName").prop('readOnly', true);
+                        $("#customerAddress").prop('readOnly', true);
                     }
                 }
             });
@@ -220,6 +220,8 @@
     });
 </script>
 
+
+
 {{--select class=" js-example-basic-multiple itemName" multiple="multiple" style="width:500px;" name="itemName"></select>
 
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"
@@ -251,7 +253,8 @@
     });
 
 
-</script>--}}
+</script>--}}{{--
+
 
 
 <script>
@@ -285,4 +288,5 @@
         });
     });
 </script>
+--}}
 

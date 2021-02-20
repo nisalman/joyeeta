@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Disbursement;
-Use App\Http\Controllers\Auth;
+use App\Http\Controllers\Auth;
 
 use App\location;
 use App\Store;
 use App\Transaction;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -30,13 +32,20 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
     public function superAdminHome()
     {
-        $adminCount=[];
-        $adminCount['location']=location::all()->count();
-        $adminCount['store']=Store::all()->count();
-        $adminCount['transaction']=Transaction::all()->count();
-        $adminCount['disbursement'] =Disbursement::all()->count();
+        $adminCount = [];
+        $adminCount['location'] = location::all()->count();
+        $adminCount['store'] = Store::all()->count();
+        $adminCount['transaction'] = Transaction::all()->count();
+        $adminCount['disbursement'] = Disbursement::all()->count();
+
+        $adminOperatorCount = [];
+        $userLocation = location::where('admin_id', userId())->first();
+        $adminOperatorCount['store'] = count($userLocation->store);
+        $adminOperatorCount['transaction']=Transaction::where('location_id',$userLocation->id)->count();
+
 
         /*$otherCount=[];
         $userLocation = location::where('admin_id', userId())->first();
@@ -46,13 +55,15 @@ class HomeController extends Controller
         $otherCount['transaction']=Transaction::all()->count();
         $otherCount['disbursement'] =Disbursement::all()->count();*/
 
-        return view('admin.home', compact('adminCount'));
+        return view('admin.home', compact('adminCount','adminOperatorCount'));
     }
+
     public function localAdminHome()
     {
         return view('admin.home');
     }
-    public  function operatorHome()
+
+    public function operatorHome()
     {
         return view('admin.home');
     }
@@ -73,6 +84,6 @@ class HomeController extends Controller
     public function logActivity()
     {
         $logs = \LogActivity::logActivityLists();
-        return view('logActivity',compact('logs'));
+        return view('logActivity', compact('logs'));
     }
 }

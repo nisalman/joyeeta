@@ -36,9 +36,17 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::get('check','CustomerController@autocomplete');
     Route::get('/search', 'Select2SearchController@index');
 
+
+    Route::get('transaction/check', 'TransactionController@check');
+
+
     Route::get('check-number/{number}', 'CustomerController@checkNumber');
     Route::get('transaction/getStores/{id}','TransactionController@getStorebyLocation');
+    Route::get('transaction/cancelled_list','TransactionController@viewCancelledlist')->name('transaction.cancelledlist');
     Route::post('transaction/search','TransactionController@search')->name('transaction.search');
+    Route::get('transaction/show/{id}','TransactionController@show')->name('transaction.show');
+    Route::get('transaction/cancel/{id}','TransactionController@cancel')->name('transaction.cancel');
+    Route::get('transaction/active/{id}','TransactionController@active')->name('transaction.active');
 
     Route::get('disbursement/make-batch','DisbursementController@getSearchResult');
     Route::post('disbursement/batch-disburse','DisbursementController@batchDisburse')->name('disbursement.batch');

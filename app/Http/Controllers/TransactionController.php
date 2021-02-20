@@ -22,6 +22,11 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function check()
+    {
+        return 1;
+    }
+
     public function index()
     {
 
@@ -34,11 +39,13 @@ class TransactionController extends Controller
             return view('transaction.view', compact('transactions', 'allLocation'));
 
         } elseif (Gate::allows('isAdmin')) {
-            $transactions = Transaction::all();
+            $location= location::where('admin_id',userId())->first();
+            $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
             return view('transaction.view', compact('transactions'));
 
         } elseif (Gate::allows('isOperator')) {
-            $transactions = Transaction::all();
+            $location= location::where('operator_id',userId())->first();
+            $transactions = Transaction::where('location_id', $location->id)->paginate(10);
             return view('transaction.view', compact('transactions'));
 
         }
@@ -82,6 +89,30 @@ class TransactionController extends Controller
 
         return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
     }
+    public function show($id)
+    {
+        $transaction=[];
+        $transactions = Transaction::find($id);
+
+        $store=Store::find($transactions->store_id);
+        $customer =Customer::find($transactions->customer_id);
+
+        $transactions->id;
+        $transactions->transactionID;
+        $transactions->location_id= $store->location->name;
+        $transactions->store_id= $store->name;
+        $transactions->customerName=$customer->name;
+        $transactions->customerMobile=$customer->mobile;
+        $transactions->customerAddress=$customer->address;
+        $transactions->cardNo;
+        $transactions->final_payable;
+        $transactions->cardType=getCardType($transactions->cardType);
+        $transactions->apprCode;
+        $transactions->dateTime= Carbon::parse($transactions->dateTime)->format('d-m-y h:m');
+        ;
+
+        return response()->json($transactions);
+    }
 
     public function test()
     {
@@ -94,9 +125,8 @@ class TransactionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TransactionFormRequest $request)
     {
-        return $request;
 
         $storePrefix = Store::find($request->storeLocation)->location->prefix;
         $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
@@ -131,7 +161,14 @@ class TransactionController extends Controller
 
          }
 
+    public function viewCancelledlist()
+    {
+        $allLocation = location::all();
+        return $transactions=Transaction::where('is_cancelled', '1')
+            ->paginate(10);
+        return view('transaction.view_cancelled', compact('transactions', 'allLocation'));
 
+    }
 
     /**
      * Display the specified resource.
@@ -139,10 +176,7 @@ class TransactionController extends Controller
      * @param \App\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Transaction $transaction)
-    {
-        //
-    }
+
 
     public function saveTransaction($customerId, $transactionID, $invoiceNO,  $request, $updateBalance)
     {
@@ -219,10 +253,32 @@ class TransactionController extends Controller
      * @param \App\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function cancel($id)
     {
-        //
+
+        $transaction= Transaction::where('id',$id)->first();
+
+        if ($transaction->is_disburse==0 || $transaction->batch_id==null)
+        {
+          Transaction::where('id',$id)->update(['is_cancelled' => 1]);
+            return redirect()->back()->with('successMsg', 'Transaction Successfully cancelled');
+        }
+        else
+        {
+            Toastr()->error('Transaction can not cancelled', 'Sorry');
+            return redirect()->back();
+        }
+
+
     }
+
+    public function active($id)
+    {
+        Transaction::where('id',$id)->update(['is_cancelled' => 0]);
+        return redirect()->back()->with('successMsg', 'Transaction Successfully reactivated');
+    }
+
+
 
     public function getStorebyLocation($id)
     {
