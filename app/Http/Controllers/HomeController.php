@@ -43,9 +43,9 @@ class HomeController extends Controller
 
         $adminOperatorCount = [];
         $userLocation = location::where('admin_id', userId())->first();
-        $adminOperatorCount['store'] = count($userLocation->store);
-        $adminOperatorCount['transaction']=Transaction::where('location_id',$userLocation->id)->count();
-
+//        $adminOperatorCount['store'] = count($userLocation->store);
+//        $adminOperatorCount['transaction']=Transaction::where('location_id',$userLocation->id)->count();
+//
 
         /*$otherCount=[];
         $userLocation = location::where('admin_id', userId())->first();

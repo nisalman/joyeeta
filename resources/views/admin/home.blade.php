@@ -20,7 +20,8 @@
                         </div>
                         <div class="value">
                             <h1 class="">
-                                {{$adminOperatorCount['store']}}
+                                10
+{{--                               {{$adminOperatorCount['store']}}--}}
                             </h1>
                             <p>Stores</p>
                         </div>
@@ -33,7 +34,8 @@
                         </div>
                         <div class="value">
                             <h1 class="">
-                                {{$adminOperatorCount['transaction']}}
+                                10
+{{--                                {{$adminOperatorCount['transaction']}}--}}
                             </h1>
                             <p>Transactions</p>
                         </div>
