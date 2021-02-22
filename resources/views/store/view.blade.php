@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Advanced Table
+                        Store Table
                     </header>
 
                     <div class="card-body">
@@ -20,9 +20,7 @@
                                     <th>Contact Number</th>
                                     <th>Payment Method</th>
                                     <th class="hidden-phone">Bank/MFS name</th>
-                                    <th class="hidden-phone">Account Number</th>
                                     <th>payment_details</th>
-                                    <th>Balance</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -35,13 +33,11 @@
                                     <td>{{$store->contact_number}}</td>
                                     <td>{{$store->payment_method}}</td>
                                     <td>{{$store->bank_mfs_name}}</td>
-                                    <td class="center hidden-phone">4</td>
                                     <td class="center hidden-phone">{{$store->payment_details}}</td>
-                                    <td>{{$store->balance}}</td>
                                     <td>
                                         <button class="btn btn-success btn-sm"><i class="fa fa-check"></i></button>
                                         <a href="{{route('store.edit', $store->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
-                                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>
+{{--                                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>--}}
                                     </td>
                                 </tr>
                                 @endforeach
