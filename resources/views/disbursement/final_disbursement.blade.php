@@ -16,6 +16,8 @@
                         Batch ID: {{$request->batchID}}<br>
                         Store ID: {{$storeName}}<br>
                         Total amount: {{$request->totalAmount}}<br>
+                        Commission amount: {{$commissionAmount}}<br>
+                        Final Payable: {{$netPayable}}<br>
                         <form action="{{ route('disbursement.confirmation') }}" enctype="multipart/form-data"
                               method="post">
                             {{ method_field('post') }}

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFormRequest;
 use App\location;
 use App\Store;
+use App\Transaction;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class StoreController extends Controller
 {
@@ -19,9 +21,32 @@ class StoreController extends Controller
     public function index()
     {
         \LogActivity::addToLog('Store Viewed');
-        $stores= Store::all();
+
+       /* $location = location::where('admin_id',userId())
+            ->first();
+        $stores= Store::where('location_id', $location->id)->get();
         $userId= Store::find(1);
-        return view('store.view', compact('stores','userId'));
+        return view('store.view', compact('stores','userId'));*/
+
+        if (Gate::allows('isSuperAdmin')) {
+            $location = location::all();
+            $stores= Store::all();
+            $userId= Store::find(1);
+            return view('store.view', compact('stores','userId'));
+
+        } elseif (Gate::allows('isAdmin')) {
+            $location = location::where('admin_id',userId())
+                ->first();
+            $stores= Store::where('location_id', $location->id)->get();
+            $userId= Store::find(1);
+            return view('store.view', compact('stores','userId'));
+
+        } elseif (Gate::allows('isOperator')) {
+
+
+        }
+
+
     }
 
     /**
@@ -34,14 +59,30 @@ class StoreController extends Controller
         \LogActivity::addToLog('Store Create clicked');
 
 
-        $locationData = location::where('admin_id',userType())
-            ->first();
-
-        $allLocations= location::all();
         /*return Store::find(1)->location;
         return Store::find($locationData->id);*/
 
-        return view('store.create', compact('locationData','allLocations'));
+        if (Gate::allows('isSuperAdmin')) {
+
+            $locationData = location::where('admin_id',userType())
+                ->first();
+
+            $allLocations= location::all();
+
+            return view('store.create', compact('locationData','allLocations'));
+
+
+        } elseif (Gate::allows('isAdmin')) {
+            $locationData = location::where('admin_id',userType())
+                ->first();
+             $allLocations= location::where('admin_id',userId())->first();
+//            $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
+            return view('store.create', compact('locationData','allLocations'));
+
+        } elseif (Gate::allows('isOperator')) {
+
+        }
+
     }
 
     /**
@@ -50,18 +91,22 @@ class StoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreFormRequest $request)
+    public function store(Request $request)
     {
-        //return $request;
+
+         $location = location::where('admin_id',userId())
+            ->first();
         $Store = new Store();
         $Store->name = $request->storeName;
         $Store->number = $request->storeNumber;
+        $Store->location_id = $location->id;
         $Store->contact_name = $request->contactName;
         $Store->contact_number = $request->contactNumber;
         $Store->payment_method = $request->paymenMethod;
         $Store->bank_mfs_name = $request->bank_mfs_name;
         $Store->account_number = $request->acNumber;
         $Store->payment_details = $request->paymentDetails;
+        $Store->user_id = userId();
 
         $Store->save();
         \LogActivity::addToLog(' New Store created');

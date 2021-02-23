@@ -81,6 +81,24 @@
             }
         }
     </style>
+
+    <style>
+        footer {
+
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+
+        }
+        .sidebar-class {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
     <!-- Styles -->
     {{--
         <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
@@ -97,11 +115,14 @@
     <section id="main-content">
         @yield('content')
     </section>
+
+</section>
+<footer>
     @if(Request::is('admin*'))
         @include('layouts.partial.footer')
     @endif
-</section>
 
+</footer>
 
 <script src="{{asset('admin/js/jquery.js')}}"></script>
 

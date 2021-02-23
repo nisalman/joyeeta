@@ -39,12 +39,12 @@ class TransactionController extends Controller
             return view('transaction.view', compact('transactions', 'allLocation'));
 
         } elseif (Gate::allows('isAdmin')) {
-            $location= location::where('admin_id',userId())->first();
+            $location = location::where('admin_id', userId())->first();
             $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
             return view('transaction.view', compact('transactions'));
 
         } elseif (Gate::allows('isOperator')) {
-            $location= location::where('operator_id',userId())->first();
+            $location = location::where('operator_id', userId())->first();
             $transactions = Transaction::where('location_id', $location->id)->paginate(10);
             return view('transaction.view', compact('transactions'));
 
@@ -75,11 +75,11 @@ class TransactionController extends Controller
      */
     public function create()
     {
-
+        // return User::find(userId())->location;
 
         \LogActivity::addToLog('Transaction Create Clicked');
 
-        $locationData = location::where('admin_id', userType())->first();
+        $locationData = location::where('admin_id', userId())->first();
         if (userType() == 3) {
             $locationData = location::where('operator_id', Auth::user()->id)->first();
         }
@@ -89,27 +89,27 @@ class TransactionController extends Controller
 
         return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
     }
+
     public function show($id)
     {
-        $transaction=[];
+        $transaction = [];
         $transactions = Transaction::find($id);
 
-        $store=Store::find($transactions->store_id);
-        $customer =Customer::find($transactions->customer_id);
+        $store = Store::find($transactions->store_id);
+        $customer = Customer::find($transactions->customer_id);
 
         $transactions->id;
         $transactions->transactionID;
-        $transactions->location_id= $store->location->name;
-        $transactions->store_id= $store->name;
-        $transactions->customerName=$customer->name;
-        $transactions->customerMobile=$customer->mobile;
-        $transactions->customerAddress=$customer->address;
+        $transactions->location_id = $store->location->name;
+        $transactions->store_id = $store->name;
+        $transactions->customerName = $customer->name;
+        $transactions->customerMobile = $customer->mobile;
+        $transactions->customerAddress = $customer->address;
         $transactions->cardNo;
         $transactions->final_payable;
-        $transactions->cardType=getCardType($transactions->cardType);
+        $transactions->cardType = getCardType($transactions->cardType);
         $transactions->apprCode;
-        $transactions->dateTime= Carbon::parse($transactions->dateTime)->format('d-m-y h:m');
-        ;
+        $transactions->dateTime = Carbon::parse($transactions->dateTime)->format('d-m-y h:m');;
 
         return response()->json($transactions);
     }
@@ -125,25 +125,25 @@ class TransactionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TransactionFormRequest $request)
+    public function store(Request $request)
     {
-
-        $storePrefix = Store::find($request->storeLocation)->location->prefix;
+      //  return $request;
+        $storePrefix = location::find($request->storeLocation)->prefix;
         $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
 
-        $getCustomerInfo = Customer::where('mobile', $request->country_name)
+        $getCustomerInfo = Customer::where('mobile', $request->customer_number)
             ->first();
 
         $invoiceNO = Carbon::parse()->nowWithSameTz()->format('ydmhm');
 
-        $updateBalance = Store::find($request->storeLocation)->balance + $request->finalPayable;
+        /*        $updateBalance = Store::find($request->storeLocation)->balance + $request->finalPayable;*/
 
 
         if ($getCustomerInfo == NULL) {
 
             $Customer = new Customer();
             $Customer->name = $request->customerName;
-            $Customer->mobile = $request->country_name;
+            $Customer->mobile = $request->customer_number;
             $Customer->address = $request->customerAddress;
             $Customer->save();
 
@@ -151,20 +151,20 @@ class TransactionController extends Controller
 
         } else {
 
-            $customer = Customer::where('mobile', $request->country_name)
+            $customer = Customer::where('mobile', $request->customer_number)
                 ->select('id')
                 ->first();
             $customerId = $customer->id;
         }
 
-        return $this->saveTransaction($customerId, $transactionID, $invoiceNO, $request, $updateBalance);
+        return $this->saveTransaction($customerId, $transactionID, $invoiceNO, $request);
 
-         }
+    }
 
     public function viewCancelledlist()
     {
         $allLocation = location::all();
-        return $transactions=Transaction::where('is_cancelled', '1')
+        return $transactions = Transaction::where('is_cancelled', '1')
             ->paginate(10);
         return view('transaction.view_cancelled', compact('transactions', 'allLocation'));
 
@@ -178,7 +178,7 @@ class TransactionController extends Controller
      */
 
 
-    public function saveTransaction($customerId, $transactionID, $invoiceNO,  $request, $updateBalance)
+    public function saveTransaction($customerId, $transactionID, $invoiceNO, $request)
     {
         //return $request;
         $Transaction = new Transaction();
@@ -194,8 +194,8 @@ class TransactionController extends Controller
         $Transaction->invoice_no = $request->storeLocation . $invoiceNO;
         $Transaction->save();
 
-        Store::where('id', $request->storeLocation)
-            ->update(['balance' => $updateBalance]);
+        /* Store::where('id', $request->storeLocation)
+             ->update(['balance' => $updateBalance]);*/
 
         if ($request->pr) {
             return $this->print($request, $Transaction);
@@ -213,14 +213,17 @@ class TransactionController extends Controller
             $data = DB::table('customers')
                 ->where('mobile', 'LIKE', "%{$query}%")
                 ->get();
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
-            foreach ($data as $row) {
-                $output .= '
+
+                $output = '<ul class="dropdown-menu" id="numberDropDown" style="display:block; position:relative">';
+                foreach ($data as $row) {
+                    $output .= '
        <li>' . $row->mobile . '</li>
        ';
-            }
-            $output .= '</ul>';
-            echo $output;
+                }
+                $output .= '</ul>';
+                echo $output;
+
+
         }
     }
 
@@ -256,15 +259,12 @@ class TransactionController extends Controller
     public function cancel($id)
     {
 
-        $transaction= Transaction::where('id',$id)->first();
+        $transaction = Transaction::where('id', $id)->first();
 
-        if ($transaction->is_disburse==0 || $transaction->batch_id==null)
-        {
-          Transaction::where('id',$id)->update(['is_cancelled' => 1]);
+        if ($transaction->is_disburse == 0 || $transaction->batch_id == null) {
+            Transaction::where('id', $id)->update(['is_cancelled' => 1]);
             return redirect()->back()->with('successMsg', 'Transaction Successfully cancelled');
-        }
-        else
-        {
+        } else {
             Toastr()->error('Transaction can not cancelled', 'Sorry');
             return redirect()->back();
         }
@@ -274,10 +274,9 @@ class TransactionController extends Controller
 
     public function active($id)
     {
-        Transaction::where('id',$id)->update(['is_cancelled' => 0]);
+        Transaction::where('id', $id)->update(['is_cancelled' => 0]);
         return redirect()->back()->with('successMsg', 'Transaction Successfully reactivated');
     }
-
 
 
     public function getStorebyLocation($id)
@@ -289,7 +288,7 @@ class TransactionController extends Controller
     public function print($request, $Transaction)
     {
         $trans = $request;
-        $customer = Customer::where('mobile',$request->country_name)->first();
+        $customer = Customer::where('mobile', $request->customer_number)->first();
         $trans['transactionID'] = $Transaction->transactionID;
 
         $store = Store::find($trans->storeLocation)->first();
@@ -299,7 +298,7 @@ class TransactionController extends Controller
         $trans['invoice_no'] = $Transaction->invoice_no;
 
         //return $trans;
-        return view('print', compact('trans','customer'));
+        return view('print', compact('trans', 'customer'));
     }
 
     public function vat_tax_calculation()

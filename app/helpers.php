@@ -39,3 +39,11 @@ function getCardType($type)
         return "American Express";
     }
 }
+function paymentName($type)
+{
+    if ($type == '1') {
+        return "Bank";
+    }  else {
+        return "MFS";
+    }
+}

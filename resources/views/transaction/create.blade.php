@@ -38,9 +38,9 @@
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Location:</label>
                                     <div class="col-sm-4">
-                                        <input type="hidden" name="storeLocation" value="{{\App\User::find(userId())->operator->id}}" id="storeLocation" class="form-control"/ >
+                                        <input type="hidden" name="storeLocation" value="{{\App\location::where('admin_id', userId())->first()->id}}" id="storeLocation" class="form-control"/ >
                                         @php
-                                            echo \App\User::find(userId())->operator->name;
+                                            echo \App\location::where('admin_id', userId())->first()->name;
                                         @endphp
                                     </div>
 
@@ -59,7 +59,7 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Customer
                                     Number</label>
                                 <div class="col-sm-4">
-                                    <input type="number" name="country_name" id="country_name" class="form-control"/>
+                                    <input onfocusout="clearInput()" type="number" name="customer_number" id="customer_number" class="form-control"/>
                                     <div id="countryList">
                                     </div>
                                 </div>
@@ -70,6 +70,7 @@
                                            value="">
                                 </div>
                             </div>
+
 
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Customer address</label>
@@ -143,7 +144,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#country_name').keyup(function () {
+        $('#customer_number').keyup(function () {
             var query = $(this).val();
             if (query != '') {
                 var _token = $('input[name="_token"]').val();
@@ -152,6 +153,7 @@
                     method: "GET",
                     data: {query: query, _token: _token},
                     success: function (data) {
+                        console.log(data);
                         $('#countryList').fadeIn();
                         $('#countryList').html(data);
                     }
@@ -160,11 +162,11 @@
         });
 
         $(document).on('click', 'li', function () {
-            $('#country_name').val($(this).text());
+            $('#customer_number').val($(this).text());
             $('#countryList').fadeOut();
 
 
-            var id = $('#country_name').val();
+            var id = $('#customer_number').val();
             console.log(id);
             $.ajaxSetup({
                 headers: {
@@ -181,6 +183,8 @@
                     if (data == 0) {
                         console.log(data);
                     } else {
+                        console.log(data);
+
                         $("#cusStatus").css({"visibility": "hidden"});
                         $("#customerName").val(data.name);
                         $("#customerAddress").val(data.address);
@@ -290,3 +294,14 @@
 </script>
 --}}
 
+<script>
+    function clearInput(){
+        document.getElementById('customerAddress').value = '';
+        document.getElementById('customerName').value = '';
+        $("#customerName").prop('readOnly', false);
+        $("#customerAddress").prop('readOnly', false);
+
+        var list = document.getElementById("numberDropDown");
+        list.remove();
+    }
+</script>

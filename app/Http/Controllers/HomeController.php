@@ -42,9 +42,9 @@ class HomeController extends Controller
         $adminCount['disbursement'] = Disbursement::all()->count();
 
         $adminOperatorCount = [];
-        $userLocation = location::where('admin_id', userId())->first();
-//        $adminOperatorCount['store'] = count($userLocation->store);
-//        $adminOperatorCount['transaction']=Transaction::where('location_id',$userLocation->id)->count();
+        $userLocation  = location::where('admin_id', userId())->first();
+        $adminOperatorCount['store'] = Store::where('location_id', $userLocation->id)->count();
+        $adminOperatorCount['transaction']=Transaction::where('location_id',$userLocation->id)->count();
 //
 
         /*$otherCount=[];

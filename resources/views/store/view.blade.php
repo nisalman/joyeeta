@@ -31,7 +31,7 @@
                                     <td>{{$store->number}}</td>
                                     <td>{{$store->contact_name}}</td>
                                     <td>{{$store->contact_number}}</td>
-                                    <td>{{$store->payment_method}}</td>
+                                    <td>{{ paymentName($store->payment_method)}}</td>
                                     <td>{{$store->bank_mfs_name}}</td>
                                     <td class="center hidden-phone">{{$store->payment_details}}</td>
                                     <td>

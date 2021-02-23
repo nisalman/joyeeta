@@ -48,7 +48,7 @@
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"
-                                                  id="basic-addon3">{{$locationData->prefix}}</span>
+                                                  id="basic-addon3">{{$allLocations->prefix}}</span>
                                         </div>
                                         <input type="text" name="storeNumber" class="form-control"
                                                aria-describedby="basic-addon3">

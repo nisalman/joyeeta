@@ -24,7 +24,7 @@ class StoreFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'store_name' => 'required',
+            'storeName' => 'required',
             'storeNumber' => 'required',
             'contactNumber' => 'required',
             'paymenMethod' => 'required',
@@ -35,7 +35,7 @@ class StoreFormRequest extends FormRequest
         public function messages()
     {
         return [
-            'store_name.required' => 'Give a name of Store',
+            'storeName.required' => 'Give a name of Store',
             'storeNumber.required' => 'Insert a Store Number',
             'contactNumber.required' => 'Insert a contact person number.',
             'paymenMethod.required' => 'Insert a payment method',
