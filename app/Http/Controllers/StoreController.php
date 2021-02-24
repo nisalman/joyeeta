@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Yoeunes\Toastr\Toastr;
 
 class StoreController extends Controller
 {
@@ -22,28 +23,36 @@ class StoreController extends Controller
     {
         \LogActivity::addToLog('Store Viewed');
 
-       /* $location = location::where('admin_id',userId())
-            ->first();
-        $stores= Store::where('location_id', $location->id)->get();
-        $userId= Store::find(1);
-        return view('store.view', compact('stores','userId'));*/
 
         if (Gate::allows('isSuperAdmin')) {
-            $location = location::all();
+             $location = location::all();
             $stores= Store::all();
-            $userId= Store::find(1);
+             $userId= Store::find(1);
+
             return view('store.view', compact('stores','userId'));
 
         } elseif (Gate::allows('isAdmin')) {
+
             $location = location::where('admin_id',userId())
                 ->first();
-            $stores= Store::where('location_id', $location->id)->get();
-            $userId= Store::find(1);
-            return view('store.view', compact('stores','userId'));
+
+
+            if (empty($location))
+            {
+                Toastr()->error('You have no Stores','Create a store first');
+                return redirect()->back();
+            }else {
+                $stores= Store::where('location_id', $location->id)->get();
+
+
+                $userId= Store::find(1);
+                return view('store.view', compact('stores','userId'));
+            }
+
 
         } elseif (Gate::allows('isOperator')) {
 
-
+                return 'not allowed';
         }
 
 
@@ -64,6 +73,8 @@ class StoreController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
 
+
+
             $locationData = location::where('admin_id',userType())
                 ->first();
 
@@ -73,11 +84,20 @@ class StoreController extends Controller
 
 
         } elseif (Gate::allows('isAdmin')) {
-            $locationData = location::where('admin_id',userType())
+            $allLocations= location::all();
+             $locationData = location::where('admin_id',userId())
                 ->first();
-             $allLocations= location::where('admin_id',userId())->first();
+            if (empty($locationData))
+            {
+                Toastr()->error('You can not create store with creating location','No Location and store found');
+                return redirect()->back();
+            }else
+            {
+                $allLocations= location::where('admin_id',userId())->first();
+                return view('store.create', compact('locationData','allLocations'));
+
+            }
 //            $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
-            return view('store.create', compact('locationData','allLocations'));
 
         } elseif (Gate::allows('isOperator')) {
 
@@ -91,7 +111,7 @@ class StoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreFormRequest $request)
     {
 
          $location = location::where('admin_id',userId())
@@ -132,11 +152,11 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        $locationData = location::where('admin_id',userType())
+         $locationData = location::where('admin_id',userId())
             ->first();
 
         $allLocations= location::all();
-        $Store= Store::find($id);
+         $Store = Store::find($id);
         return view( 'store.edit', compact('Store', 'allLocations','locationData'));
 
     }
@@ -165,7 +185,7 @@ class StoreController extends Controller
         $Store->save();
 
         \LogActivity::addToLog(' New Store created');
-        return redirect()->back()->with('successMsg','Store Successfully Updated');
+        return $this->index()->with('successMsg','Store Successfully Updated');
 
 
 

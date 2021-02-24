@@ -32,7 +32,7 @@ class TransactionFormRequest extends FormRequest
         return [
             'storeLocation' => 'required|not_in:0',
             'store_id' => 'required|not_in:0',
-            'country_name' => 'required',
+            'customer_number' => 'required',
             'customerName' => 'required',
             'customerAddress' => 'required',
             'finalPayable' => 'required',
@@ -48,7 +48,7 @@ class TransactionFormRequest extends FormRequest
         return [
             'storeLocation.required' => 'Select Location',
             'store_id.required' => 'Select Store',
-            'country_name.required' => 'Insert Customer Number',
+            'customer_number.required' => 'Insert Customer Number',
             'customerName.required' => 'Give a name of Customer',
             'customerAddress.required' => 'Insert Customer address.',
             'contactName.required' => 'Insert customer name',

@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Advanced Table
+                        Location list
                     </header>
                     <div class="card-body">
                         <div class="adv-table">

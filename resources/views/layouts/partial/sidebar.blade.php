@@ -46,7 +46,7 @@
             @can('isSuperAdmin')
                 <li class=" sub-menu">
                     <a href="javascript:;" class=" {{ Request::is('admin/disbursement*') ? 'active': '' }}">
-                        <i class="fa fa-money"></i>
+                        <i class="fa fa-save"></i>
                         <span>Disbursement</span>
                     </a>
                     <ul class="sub">

@@ -56,11 +56,9 @@
                                 <div class="col-sm-9">
                                     <select class="form-control form-control-sm mb-2" name="userType">
                                         <option> Select User Type</option>
-                                        @foreach($userType as $userRole)
-                                            <option value="{{ $userRole->user_role_id}}" {{($userRole->user_role_id == $user->user_role_id) ? 'selected' : '' }}>
-                                                {{ $userRole->role_name }}
-                                            </option>
-                                        @endforeach
+                                            <option value="2">Admin</option>
+                                            <option value="3">Operator</option>
+                                        </select>
                                     </select>
                                 </div>
                             </div>

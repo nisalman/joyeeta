@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Horizontal Forms
+                        Create Store
                     </header>
                     <div class="col-lg-8">
                         @include('layouts.partial.validationMessage')
@@ -111,7 +111,7 @@
                             </div>
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">Payment Details
-                                    (Optional)</label>
+                                   </label>
                                 <div class="col-sm-9">
                                         <textarea type="text" rows="4" cols="50" class="form-control"
                                                   id="inputPassword3" name="paymentDetails"

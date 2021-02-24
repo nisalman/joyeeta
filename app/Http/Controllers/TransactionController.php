@@ -39,14 +39,26 @@ class TransactionController extends Controller
             return view('transaction.view', compact('transactions', 'allLocation'));
 
         } elseif (Gate::allows('isAdmin')) {
+
             $location = location::where('admin_id', userId())->first();
-            $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
-            return view('transaction.view', compact('transactions'));
+            if (empty($location)) {
+                Toastr()->error('You have no Transactions', 'Create a store first');
+                return redirect()->back();
+            } else {
+                $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
+                return view('transaction.view', compact('transactions'));
+            }
+
 
         } elseif (Gate::allows('isOperator')) {
-            $location = location::where('operator_id', userId())->first();
-            $transactions = Transaction::where('location_id', $location->id)->paginate(10);
-            return view('transaction.view', compact('transactions'));
+             $location = location::where('operator_id', userId())->first();
+            if (empty($location)) {
+                Toastr()->error('You have no Transactions', 'Create a store first');
+                return redirect()->back();
+            } else {
+                $transactions = Transaction::where('location_id', $location->id)->paginate(10);
+                return view('transaction.view', compact('transactions'));
+            }
 
         }
     }
@@ -79,15 +91,54 @@ class TransactionController extends Controller
 
         \LogActivity::addToLog('Transaction Create Clicked');
 
-        $locationData = location::where('admin_id', userId())->first();
-        if (userType() == 3) {
+
+        if (Gate::allows('isSuperAdmin')) {
+            $locationData = location::where('admin_id', userId())->first();
+
+            $shopData = Store::where('location_id', $locationData->id)->get();
+            $allLocation = location::all();
+
+
+            return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+
+        } elseif (Gate::allows('isAdmin')) {
+
+            $locationData = location::where('admin_id', userId())->first();
+
+            if (empty($locationData)) {
+                Toastr()->error('You can not Transact store without creating location', 'Create a store first');
+                return redirect()->back();
+            } else {
+                $allLocations = location::where('admin_id', userId())->first();
+                $shopData = Store::where('location_id', $locationData->id)->get();
+                $allLocation = location::all();
+                return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+
+            }
+
+            $shopData = Store::where('location_id', $locationData->id)->get();
+            $allLocation = location::all();
+
+
+            return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+
+        } elseif (Gate::allows('isOperator')) {
+
             $locationData = location::where('operator_id', Auth::user()->id)->first();
+            if (empty($locationData)) {
+                Toastr()->error('You can not Transact store without creating location', 'Create a store first');
+                return redirect()->back();
+            } else {
+                $shopData = Store::where('location_id', $locationData->id)->get();
+                $allLocation = location::all();
+                return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+
+            }
+
+
         }
-        $shopData = Store::where('location_id', $locationData->id)->get();
-        $allLocation = location::all();
 
 
-        return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
     }
 
     public function show($id)
@@ -125,9 +176,9 @@ class TransactionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TransactionFormRequest $request)
     {
-      //  return $request;
+
         $storePrefix = location::find($request->storeLocation)->prefix;
         $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
 
@@ -214,14 +265,14 @@ class TransactionController extends Controller
                 ->where('mobile', 'LIKE', "%{$query}%")
                 ->get();
 
-                $output = '<ul class="dropdown-menu" id="numberDropDown" style="display:block; position:relative">';
-                foreach ($data as $row) {
-                    $output .= '
+            $output = '<ul class="dropdown-menu" id="numberDropDown" style="display:block; position:relative">';
+            foreach ($data as $row) {
+                $output .= '
        <li>' . $row->mobile . '</li>
        ';
-                }
-                $output .= '</ul>';
-                echo $output;
+            }
+            $output .= '</ul>';
+            echo $output;
 
 
         }

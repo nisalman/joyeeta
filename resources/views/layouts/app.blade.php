@@ -14,7 +14,7 @@
 {{ Html::favicon( 'favicon.ico' ) }}
 
 
-    <!-- Fonts -->
+<!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css" type="text/css">
@@ -89,14 +89,20 @@
             bottom: 0;
             width: 100%;
             text-align: center;
-
+            position: fixed;
+            padding-top: 10px;
+            padding-bottom: 0px;
+            background-color: white;
         }
+
         .sidebar-class {
             position: fixed;
             left: 0;
             bottom: 0;
             width: 100%;
-            text-align: center;
+            text-align: left;
+            background-color: white;
+            float: left;
         }
     </style>
     <!-- Styles -->

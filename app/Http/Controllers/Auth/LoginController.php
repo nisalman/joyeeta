@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
 use Yoeunes\Toastr\Toastr;
 
 class LoginController extends Controller
@@ -39,8 +42,64 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
     public function login(Request $request)
     {
+
+        /* $messages = [
+             "email.required" => "Email is required",
+             "email.email" => "Email is not valid",
+             "email.exists" => "Email doesn't exists",
+             "password.required" => "Password is required",
+             "password.min" => "Password must be at least 6 characters"
+         ];
+
+         // validate the form data
+         $validator = Validator::make($request->all(), [
+             'email' => 'required|email|exists:users,email',
+             'password' => 'required|min:6'
+         ], $messages);
+
+         if ($validator->fails()) {
+
+             return back()->with('error', 'Wrong Credentials');
+            return back()->withErrors($validator)->withInput();
+    } else
+{
+$input = $request->all();
+    // attempt to log
+if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password'], 'status' => 1)))
+{
+
+if (Auth::check() && auth()->user()->user_role_id == 1)
+{
+return redirect()->route('admin.home');
+}
+
+elseif
+(Auth::check() && auth()->user()->user_role_id == 2){
+
+                    return redirect()->route('admin.home');
+                } elseif (Auth::check() && auth()->user()->user_role_id == 3){
+                    return redirect()->route('admin.home');
+                } else {
+    Toastr()->error('Wrong');
+    return 'You have not admin access';
+}
+            }
+
+            // if unsuccessful -> redirect back
+            return redirect()->back()->withInput($request->only('email', 'remember'))->withErrors([
+                'approve' => 'Wrong password or this account not approved yet.',
+            ]);
+        }*/
+
+
+
+
+
+
+
         $input = $request->all();
 
         $this->validate($request, [
@@ -48,31 +107,29 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
-        {
+        if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password'], 'status' => 1))) {
 
             if (Auth::check() && auth()->user()->user_role_id == 1) {
                 return redirect()->route('admin.home');
-            }
-            elseif (Auth::check() && auth()->user()->user_role_id == 2) {
+            } elseif (Auth::check() && auth()->user()->user_role_id == 2) {
+
                 return redirect()->route('admin.home');
-            }
-            elseif (Auth::check() && auth()->user()->user_role_id == 3){
+            } elseif (Auth::check() && auth()->user()->user_role_id == 3) {
                 return redirect()->route('admin.home');
-            }
-            else
-            {
+            } else {
                 Toastr()->error('Wrong');
                 return 'You have not admin access';
             }
-        }else{
+        } else {
             Toastr()->error('Wrong');
             return redirect()->route('login')
-                ->with('error','Email-Address And Password Are Wrong.');
+                ->with('error', 'Email-Address And Password Are Wrong.');
+        }
         }
 
-    }
-    public function logout(Request $request) {
+
+    public function logout(Request $request)
+    {
         Auth::logout();
         return redirect('/');
     }

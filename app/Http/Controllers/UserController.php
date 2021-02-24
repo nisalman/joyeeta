@@ -91,13 +91,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $userType = User::select('role_name', 'user_role_id')
-            ->whereIn('user_role_id', ['2', '3'])
-            ->get();
+
 
         $user = User::find($id);
 
-        return view('user.edit', compact('user', 'userType'));
+        return view('user.edit', compact('user'));
     }
 
     /**
@@ -110,11 +108,10 @@ class UserController extends Controller
     public function update(UserFromRequest $request, $id)
     {
         //return bcrypt($request->password);
-        $User=User::find($id);
+        $User = User::find($id);
 
-        if (isset($request->password))
-        {
-             $newPassword = bcrypt($request->password);
+        if (isset($request->password)) {
+            $newPassword = bcrypt($request->password);
             $User->update(['password' => $newPassword]);
         }
 
@@ -142,8 +139,15 @@ class UserController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deactivated($id)
     {
-        //
+        User::where('id', $id)->update(['status' => 0]);
+        return redirect()->back()->with('successMsg', 'User Successfully Deactivated');
+    }
+
+    public function reactivated($id)
+    {
+        User::where('id', $id)->update(['status' => 1]);
+        return redirect()->back()->with('successMsg', 'User Successfully Reactivated');
     }
 }

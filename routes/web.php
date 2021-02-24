@@ -61,6 +61,10 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
 
 
+    Route::get('user/deactivated/{id}','UserController@deactivated')->name('user.deactivated');
+    Route::get('user/reactivated/{id}','UserController@reactivated')->name('user.reactivated');
+
+
     Route::get('add-to-log', 'HomeController@myTestAddToLog');
     Route::get('logActivity', 'HomeController@logActivity')->name('logActivity');
 

@@ -34,14 +34,12 @@
                                     </div>
                                 </div>
                             @endcan
-                            @cannot('isSuperAdmin', 'isAdmin')
+                            @cannot('isSuperAdmin')
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Location:</label>
                                     <div class="col-sm-4">
-                                        <input type="hidden" name="storeLocation" value="{{\App\location::where('admin_id', userId())->first()->id}}" id="storeLocation" class="form-control"/ >
-                                        @php
-                                            echo \App\location::where('admin_id', userId())->first()->name;
-                                        @endphp
+                                        <input type="hidden" name="storeLocation" value="{{$locationData->id}}" id="storeLocation" class="form-control"/ >
+                                        {{$locationData->name}}
                                     </div>
 
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Store</label>
@@ -302,6 +300,5 @@
         $("#customerAddress").prop('readOnly', false);
 
         var list = document.getElementById("numberDropDown");
-        list.remove();
     }
 </script>

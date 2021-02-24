@@ -1,16 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+
     <section class="wrapper">
         <!--state overview start-->
-        @can('isSuperAdmin')
+      {{--  @can('isSuperAdmin')
             <p>You are Super Admin</p>
         @endcanany
         @can('isLocalAdmin')
 
             <p>You are Local Admin</p>
-        @endcan
-
+        @endcan--}}
+        @include('layouts.partial.validationMessage')
         @cannot('isSuperAdmin')
             <div class="row state-overview">
                 <div class="col-lg-6 col-sm-6">
@@ -33,7 +34,6 @@
                         </div>
                         <div class="value">
                             <h1 class="">
-
                                 {{$adminOperatorCount['transaction']}}
                             </h1>
                             <p>Transactions</p>

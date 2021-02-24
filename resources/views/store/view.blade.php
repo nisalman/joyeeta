@@ -28,7 +28,7 @@
                                 @foreach($stores as $store)
                                 <tr class="gradeX">
                                     <td>{{$store->name}}</td>
-                                    <td>{{$store->number}}</td>
+                                    <td>{{$store->location->prefix}}-{{$store->number}}</td>
                                     <td>{{$store->contact_name}}</td>
                                     <td>{{$store->contact_number}}</td>
                                     <td>{{ paymentName($store->payment_method)}}</td>

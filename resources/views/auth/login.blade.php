@@ -20,13 +20,16 @@
             left: 0;
             bottom: 0;
             width: 100%;
+            color: white;
             text-align: center;
         }
     </style>
     <!--===============================================================================================-->
 </head>
+
 <body>
 
+@include('layouts.partial.validationMessage')
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
@@ -75,8 +78,9 @@
 </body>
 <footer>
     <div class="logoSet">
-        Developed by &nbsp: <a href="https://ekshop.gov.bd"> &nbsp ekShop - <img src="{{asset('admin/img/ekshop.jpg')}}"
+        <span style="color: black">Developed by &nbsp: <a href="https://ekshop.gov.bd"> &nbsp ekShop - <img src="{{asset('admin/img/ekshop.jpg')}}"
                                                                                  height="25px" width="40px"></a>
+        </span>
     </div>
 </footer>
 </html>

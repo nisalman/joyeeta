@@ -6,9 +6,9 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Advanced Table
+                        User List
                     </header>
-
+                    @include('layouts.partial.validationMessage')
                     <div class="card-body">
                         <div class="adv-table">
                             <table class="display table table-bordered table-striped" id="dynamic-table">
@@ -37,9 +37,16 @@
                                             @endif
                                     </td>
                                     <td>
+{{--
                                         <button class="btn btn-success btn-sm" type="button" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-check"></i></button>
+--}}
                                         <a href="{{route('user.edit', $user->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
-                                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>
+                                        @if($user->status==1)
+                                            <a href="{{route('user.deactivated', $user->id)}}"><button class="btn btn-danger btn-sm"><i class="fa fa-ban "></i></button></a>
+                                        @else
+                                            <a href="{{route('user.reactivated', $user->id)}}"><button class="btn btn-success btn-sm"><i class="fa fa-check "></i></button></a>
+
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
