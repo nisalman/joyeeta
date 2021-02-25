@@ -58,7 +58,7 @@
                                     Number</label>
                                 <div class="col-sm-4">
                                     <input onfocusout="clearInput()" type="number" name="customer_number" id="customer_number" class="form-control"/>
-                                    <div id="countryList">
+                                    <div id="customerNumber">
                                     </div>
                                 </div>
 
@@ -152,8 +152,8 @@
                     data: {query: query, _token: _token},
                     success: function (data) {
                         console.log(data);
-                        $('#countryList').fadeIn();
-                        $('#countryList').html(data);
+                        $('#customerNumber').fadeIn();
+                        $('#customerNumber').html(data);
                     }
                 });
             }
@@ -161,7 +161,7 @@
 
         $(document).on('click', 'li', function () {
             $('#customer_number').val($(this).text());
-            $('#countryList').fadeOut();
+            $('#customerNumber').fadeOut();
 
 
             var id = $('#customer_number').val();
@@ -298,11 +298,12 @@
         document.getElementById('customerName').value = '';
         $("#customerName").prop('readOnly', false);
         $("#customerAddress").prop('readOnly', false);
+        $('#customerNumber').fadeOut();
 
-        var list = document.getElementById("numberDropDown");
-        //document.getElementById("numberDropDown").outerHTML = "";
-        //$('#numberDropDown').empty();
-        /*$(".dropdown-menu").css("display","");
+        /*var list = document.getElementById("numberDropDown");
+        document.getElementById("numberDropDown").outerHTML = "";
+        $('#numberDropDown').empty();
+        $(".dropdown-menu").css("display","");
         $(".dropdown-menu").css("position","");*/
 
 
