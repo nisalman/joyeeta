@@ -14,6 +14,7 @@
                             <table class="display table table-bordered table-striped" id="dynamic-table">
                                 <thead>
                                 <tr>
+                                    <th>SL No.</th>
                                     <th>Name</th>
                                     <th>Mobile</th>
                                     <th>Email</th>
@@ -23,8 +24,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($users as $user)
+                                @foreach($users as $key=>$user)
                                 <tr class="gradeX">
+                                    <td>{{$key+1}}</td>
                                     <td>{{$user->name}}</td>
                                     <td>{{$user->mobile}}</td>
                                     <td>{{$user->email}}</td>

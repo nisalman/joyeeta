@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Joyeeta POS') }}</title>
+    <title>Joyeeta POS</title>
     @toastr_css
 
     <!-- Scripts -->

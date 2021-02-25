@@ -33,10 +33,8 @@ function getCardType($type)
         return "Amex";
     } elseif ($type == '2') {
         return "Visa";
-    } elseif ($type == '3') {
+    } else  {
         return "Master";
-    } else {
-        return "American Express";
     }
 }
 function paymentName($type)

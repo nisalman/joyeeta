@@ -33,7 +33,7 @@ class TransactionController extends Controller
         $this->vat_tax_calculation();
         \LogActivity::addToLog('Transaction Viewed');
         if (Gate::allows('isSuperAdmin')) {
-            $transactions = Transaction::paginate(10);
+            $transactions = Transaction::orderBy('id', 'DESC')->paginate(10);
             $allLocation = location::all();
 
             return view('transaction.view', compact('transactions', 'allLocation'));
@@ -56,7 +56,7 @@ class TransactionController extends Controller
                 Toastr()->error('You have no Transactions', 'Create a store first');
                 return redirect()->back();
             } else {
-                $transactions = Transaction::where('location_id', $location->id)->paginate(10);
+                $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
                 return view('transaction.view', compact('transactions'));
             }
 
@@ -338,12 +338,13 @@ class TransactionController extends Controller
 
     public function print($request, $Transaction)
     {
-        $trans = $request;
+
+         $trans = $request;
         $customer = Customer::where('mobile', $request->customer_number)->first();
         $trans['transactionID'] = $Transaction->transactionID;
 
         $store = Store::find($trans->storeLocation)->first();
-        $trans['store_name'] = $store->name;
+        $trans['store_name'] = Store::find($trans->store_id)->name;
         $trans['date'] = Carbon::parse($trans->dateTime)->format('d-m-Y');
         $trans['time'] = Carbon::parse($trans->dateTime)->format('h:m');
         $trans['invoice_no'] = $Transaction->invoice_no;

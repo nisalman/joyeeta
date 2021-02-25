@@ -4,7 +4,7 @@
         <i class="fa fa-bars"></i>
     </div>
     <!--logo start-->
-    <a href="index.html" class="logo">Joyeeta<span>POS</span></a>
+    <a href="{{route('admin.home')}}" class="logo">Joyeeta<span>POS</span></a>
     <!--logo end-->
 
     <div class="top-nav ">

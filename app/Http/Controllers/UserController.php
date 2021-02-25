@@ -20,7 +20,7 @@ class UserController extends Controller
     {
 
         if (Gate::allows('isSuperAdmin')) {
-            $users = User::all();
+            $users = User::orderBy('id', 'DESC')->get();
             return view('user.view', compact('users'));
         } else {
             return 'You are not allowed';

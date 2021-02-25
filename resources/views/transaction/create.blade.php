@@ -300,5 +300,13 @@
         $("#customerAddress").prop('readOnly', false);
 
         var list = document.getElementById("numberDropDown");
+        //document.getElementById("numberDropDown").outerHTML = "";
+        //$('#numberDropDown').empty();
+        /*$(".dropdown-menu").css("display","");
+        $(".dropdown-menu").css("position","");*/
+
+
+
+
     }
 </script>

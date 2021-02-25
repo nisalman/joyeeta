@@ -170,12 +170,12 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $Store = Store::find($id);
 
         $Store->name = $request->storeName;
         $Store->number = $request->storeNumber;
         $Store->contact_name = $request->contactName;
+        $Store->location_id = $request->locationAdmin;
         $Store->contact_number = $request->contactNumber;
         $Store->payment_method = $request->paymenMethod;
         $Store->bank_mfs_name = $request->bank_mfs_name;

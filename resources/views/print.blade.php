@@ -15,7 +15,7 @@
                         <div class="col-lg-4 col-sm-4">
                             <h4>Billing From</h4>
                             <p>
-                                {{$trans->customerName}} <br>
+                                Joyeeta Foundation <br>
                                 Concord Royal Court (6th Floor), <br>
                                 275/G, Road No: 27 (Old)<br>
                                 Dhanmondi, Dhaka<br>
@@ -54,7 +54,7 @@
                         <tr>
                             <td>#</td>
                             <td>{{$trans->transactionID}}</td>
-                            <td class="hidden-phone">{{$trans->store_name}}</td>
+                            <td >{{$trans->store_name}}</td>
                             <td>{{$trans->finalPayable}}</td>
                         </tr>
                         </tbody>

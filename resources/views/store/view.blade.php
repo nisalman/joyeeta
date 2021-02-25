@@ -15,6 +15,7 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Location</th>
                                     <th>Number</th>
                                     <th>Contact Name</th>
                                     <th>Contact Number</th>
@@ -28,6 +29,7 @@
                                 @foreach($stores as $store)
                                 <tr class="gradeX">
                                     <td>{{$store->name}}</td>
+                                    <td>{{$store->location->name}}</td>
                                     <td>{{$store->location->prefix}}-{{$store->number}}</td>
                                     <td>{{$store->contact_name}}</td>
                                     <td>{{$store->contact_number}}</td>
@@ -35,7 +37,9 @@
                                     <td>{{$store->bank_mfs_name}}</td>
                                     <td class="center hidden-phone">{{$store->payment_details}}</td>
                                     <td>
+{{--
                                         <button class="btn btn-success btn-sm"><i class="fa fa-check"></i></button>
+--}}
                                         <a href="{{route('store.edit', $store->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
 {{--                                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>--}}
                                     </td>
