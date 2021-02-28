@@ -1,5 +1,15 @@
 @extends('layouts.app')
-
+@push('css')
+  <style>
+      .field-icon {
+          float: right;
+          margin-left: -25px;
+          margin-top: -25px;
+          position: relative;
+          z-index: 2;
+      }
+  </style>
+@endpush
 @section('content')
     <section class="wrapper">
         <div class="row">
@@ -38,7 +48,7 @@
                                 <label for="inputPassword3" class="col-sm-3 col-form-label">Password</label>
                                 <div class="col-sm-9">
                                     <input type="password" class="form-control" name="password"
-                                           aria-describedby="basic-addon3">
+                                           aria-describedby="basic-addon3" id="password-field" value="secret">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -73,6 +83,7 @@
             </div>
         </div>
     </section>
+
 @endsection
 
 

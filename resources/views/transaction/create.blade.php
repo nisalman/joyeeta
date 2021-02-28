@@ -299,15 +299,5 @@
         $("#customerName").prop('readOnly', false);
         $("#customerAddress").prop('readOnly', false);
         $('#customerNumber').fadeOut();
-
-        /*var list = document.getElementById("numberDropDown");
-        document.getElementById("numberDropDown").outerHTML = "";
-        $('#numberDropDown').empty();
-        $(".dropdown-menu").css("display","");
-        $(".dropdown-menu").css("position","");*/
-
-
-
-
     }
 </script>
