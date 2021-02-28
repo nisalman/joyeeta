@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Card;
 use App\Setting;
 use Flasher\Prime\FlasherInterface;
 use Illuminate\Http\Request;

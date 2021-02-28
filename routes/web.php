@@ -30,15 +30,20 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::resource('disbursement','DisbursementController');
     Route::resource('location','LocationController');
     Route::resource('user','UserController');
+    Route::resource('card','CardController');
     Route::resource('setting','SettingController');
 
     Route::get('auto','CustomerController@auto');
     Route::get('check','CustomerController@autocomplete');
     Route::get('/search', 'Select2SearchController@index');
 
+    Route::get('store/deactivate/{id}','StoreController@deactivate')->name('store.deactivate');
+    Route::get('store/active/{id}','StoreController@active')->name('store.active');
+
+
 
     Route::get('transaction/check', 'TransactionController@check');
-
+    Route::post('setting/updateCard', 'CardController@updateData')->name('card.updateData');
 
     Route::get('check-number/{number}', 'CustomerController@checkNumber');
     Route::get('transaction/getStores/{id}','TransactionController@getStorebyLocation');
@@ -59,6 +64,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
 
     Route::get('getStores/{id}','TransactionController@getStorebyLocation');
     Route::get('disbursement/getStores/{id}','TransactionController@getStorebyLocation');
+
 
 
     Route::get('user/deactivated/{id}','UserController@deactivated')->name('user.deactivated');

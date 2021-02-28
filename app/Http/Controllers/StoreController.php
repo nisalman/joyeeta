@@ -191,6 +191,29 @@ class StoreController extends Controller
 
     }
 
+    public function active($id)
+    {
+        Store::where('id', $id)->update(['is_active' => 1]);
+        return redirect()->back()->with('successMsg', 'Store Successfully reactivated');
+    }
+    public function deactivate($id)
+    {
+        $transaction=Transaction::where('store_id', $id)->where('is_disburse', '0')->first();
+        if(isset($transaction))
+        {
+            Toastr()->error('Store can not be deactivated', 'This store has pending disbursements');
+            return redirect()->back();
+
+        }
+        else
+        {
+            Store::where('id', $id)->update(['is_active' => 0]);
+            return redirect()->back()->with('successMsg', 'Store Successfully deactivated');
+        }
+
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *

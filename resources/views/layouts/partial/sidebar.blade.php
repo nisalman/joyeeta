@@ -74,6 +74,9 @@
                         <span>Settings</span>
                     </a>
                     <ul class="sub">
+                        <li><a href="{{route('card.index')}}">Card Setting</a></li>
+                    </ul>
+                    <ul class="sub">
                         <li><a href="{{route('setting.index')}}">Setup Settings</a></li>
                     </ul>
                     <ul class="sub">

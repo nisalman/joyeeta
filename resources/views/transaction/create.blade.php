@@ -38,7 +38,8 @@
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Location:</label>
                                     <div class="col-sm-4">
-                                        <input type="hidden" name="storeLocation" value="{{$locationData->id}}" id="storeLocation" class="form-control"/ >
+                                        <input type="hidden" name="storeLocation" value="{{$locationData->id}}"
+                                               id="storeLocation" class="form-control"/ >
                                         {{$locationData->name}}
                                     </div>
 
@@ -57,7 +58,8 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Customer
                                     Number</label>
                                 <div class="col-sm-4">
-                                    <input onfocusout="clearInput()" type="number" name="customer_number" id="customer_number" class="form-control"/>
+                                    <input onfocusout="clearInput()" type="number" name="customer_number"
+                                           id="customer_number" class="form-control"/>
                                     <div id="customerNumber">
                                     </div>
                                 </div>
@@ -76,10 +78,10 @@
                                     <input type="text" class="form-control" name="customerAddress" value=""
                                            id="customerAddress">
                                 </div>
-                                <label for="inputPassword3" class="col-sm-2 col-form-label">Final Payable
+                                <label for="inputPassword3" class="col-sm-2 col-form-label">Payable
                                     Amount</label>
                                 <div class="col-sm-4">
-                                    <input type="number" class="form-control" name="finalPayable">
+                                    <input type="number" class="form-control" name="receiveable_payment">
                                 </div>
                             </div>
 
@@ -89,11 +91,10 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Card Type</label>
                                 <div class="col-sm-4">
                                     <select class="form-control form-control-sm mb-2" name="cardType">
-                                        <option value="0">Select Card Type</option>
-                                        <option value="1"> Amex</option>
-                                        <option value="2"> Visa</option>
-                                        <option value="3"> Master </option>
-                                        <option value="4"> American Express</option>
+                                        <option> Select Card</option>
+                                        @foreach($card as $cd)
+                                            <option value="{{$cd->id}}"> {{$cd->name}} </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Card No</label>
@@ -223,7 +224,6 @@
 </script>
 
 
-
 {{--select class=" js-example-basic-multiple itemName" multiple="multiple" style="width:500px;" name="itemName"></select>
 
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"
@@ -293,7 +293,7 @@
 --}}
 
 <script>
-    function clearInput(){
+    function clearInput() {
         document.getElementById('customerAddress').value = '';
         document.getElementById('customerName').value = '';
         $("#customerName").prop('readOnly', false);

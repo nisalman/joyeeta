@@ -8,7 +8,7 @@
                     <header class="card-header">
                         Store Table
                     </header>
-
+                    @include('layouts.partial.validationMessage')
                     <div class="card-body">
                         <div class="adv-table">
                             <table class="display table table-bordered table-striped" id="dynamic-table">
@@ -20,7 +20,7 @@
                                     <th>Contact Name</th>
                                     <th>Contact Number</th>
                                     <th>Payment Method</th>
-                                    <th class="hidden-phone">Bank/MFS name</th>
+                                    <th>Bank/MFS name</th>
                                     <th>payment_details</th>
                                     <th>Action</th>
                                 </tr>
@@ -35,13 +35,24 @@
                                     <td>{{$store->contact_number}}</td>
                                     <td>{{ paymentName($store->payment_method)}}</td>
                                     <td>{{$store->bank_mfs_name}}</td>
-                                    <td class="center hidden-phone">{{$store->payment_details}}</td>
+                                    <td>{{$store->payment_details}}</td>
                                     <td>
-{{--
-                                        <button class="btn btn-success btn-sm"><i class="fa fa-check"></i></button>
---}}
+{{----}}
                                         <a href="{{route('store.edit', $store->id)}}"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></button></a>
-{{--                                        <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o "></i></button>--}}
+
+                                        @if($store->is_active==0)
+                                        <a href="{{route('store.active', $store->id)}}">
+                                            <button class="btn btn-success btn-sm view-btn"><i
+                                                    class="fa fa-check"></i>
+                                            </button>
+                                        </a>
+                                        @else
+                                            <a href="{{route('store.deactivate', $store->id)}}">
+                                                <button class="btn btn-danger btn-sm view-btn"><i
+                                                        class="fa fa-ban"></i>
+                                                </button>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

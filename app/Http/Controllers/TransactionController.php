@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Card;
 use App\Customer;
 use App\Http\Requests\TransactionFormRequest;
 use App\location;
@@ -51,7 +52,7 @@ class TransactionController extends Controller
 
 
         } elseif (Gate::allows('isOperator')) {
-             $location = location::where('operator_id', userId())->first();
+            $location = location::where('operator_id', userId())->first();
             if (empty($location)) {
                 Toastr()->error('You have no Transactions', 'Create a store first');
                 return redirect()->back();
@@ -94,25 +95,26 @@ class TransactionController extends Controller
 
         if (Gate::allows('isSuperAdmin')) {
             $locationData = location::where('admin_id', userId())->first();
-
+            $card = Card::all();
             $shopData = Store::where('location_id', $locationData->id)->get();
             $allLocation = location::all();
 
 
-            return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+            return view('transaction.create', compact('locationData', 'shopData', 'allLocation', 'card'));
 
         } elseif (Gate::allows('isAdmin')) {
 
             $locationData = location::where('admin_id', userId())->first();
-
+            $card = Card::all();
             if (empty($locationData)) {
                 Toastr()->error('You can not Transact store without creating location', 'Create a store first');
                 return redirect()->back();
             } else {
+
                 $allLocations = location::where('admin_id', userId())->first();
                 $shopData = Store::where('location_id', $locationData->id)->get();
                 $allLocation = location::all();
-                return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+                return view('transaction.create', compact('locationData', 'shopData', 'allLocation', 'card'));
 
             }
 
@@ -120,10 +122,10 @@ class TransactionController extends Controller
             $allLocation = location::all();
 
 
-            return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+            return view('transaction.create', compact('locationData', 'shopData', 'allLocation', 'card'));
 
         } elseif (Gate::allows('isOperator')) {
-
+            $card = Card::all();
             $locationData = location::where('operator_id', Auth::user()->id)->first();
             if (empty($locationData)) {
                 Toastr()->error('You can not Transact store without creating location', 'Create a store first');
@@ -131,14 +133,10 @@ class TransactionController extends Controller
             } else {
                 $shopData = Store::where('location_id', $locationData->id)->get();
                 $allLocation = location::all();
-                return view('transaction.create', compact('locationData', 'shopData', 'allLocation'));
+                return view('transaction.create', compact('locationData', 'shopData', 'allLocation', 'card'));
 
             }
-
-
         }
-
-
     }
 
     public function show($id)
@@ -148,6 +146,7 @@ class TransactionController extends Controller
 
         $store = Store::find($transactions->store_id);
         $customer = Customer::find($transactions->customer_id);
+        $card = Card::find($transactions->cardType);;
 
         $transactions->id;
         $transactions->transactionID;
@@ -158,7 +157,7 @@ class TransactionController extends Controller
         $transactions->customerAddress = $customer->address;
         $transactions->cardNo;
         $transactions->final_payable;
-        $transactions->cardType = getCardType($transactions->cardType);
+        $transactions->cardType = $card->name;
         $transactions->apprCode;
         $transactions->dateTime = Carbon::parse($transactions->dateTime)->format('d-m-y h:m');;
 
@@ -190,6 +189,7 @@ class TransactionController extends Controller
         /*        $updateBalance = Store::find($request->storeLocation)->balance + $request->finalPayable;*/
 
 
+
         if ($getCustomerInfo == NULL) {
 
             $Customer = new Customer();
@@ -207,9 +207,7 @@ class TransactionController extends Controller
                 ->first();
             $customerId = $customer->id;
         }
-
         return $this->saveTransaction($customerId, $transactionID, $invoiceNO, $request);
-
     }
 
     public function viewCancelledlist()
@@ -231,13 +229,28 @@ class TransactionController extends Controller
 
     public function saveTransaction($customerId, $transactionID, $invoiceNO, $request)
     {
+
+        $costCarryType = Card::find($request->cardType);
+        $chargedAmount = (($costCarryType->charge)*$request->receiveable_payment)/100;
+
+        if ($costCarryType->paid_person == 1) {
+
+            $final_payable=$request->receiveable_payment+$chargedAmount;
+
+        } else {
+            $final_payable=$request->receiveable_payment-$chargedAmount;
+
+        }
+
+
         //return $request;
         $Transaction = new Transaction();
         $Transaction->store_id = $request->store_id;
         $Transaction->transactionID = $transactionID;
         $Transaction->location_id = $request->storeLocation;
         $Transaction->customer_id = $customerId;
-        $Transaction->final_payable = $request->finalPayable;
+        $Transaction->receiveable_payment = $request->receiveable_payment;
+        $Transaction->final_payable = $final_payable;
         $Transaction->cardNo = $request->cardNo;
         $Transaction->cardType = $request->cardType;
         $Transaction->apprCode = $request->apprCode;
@@ -332,14 +345,14 @@ class TransactionController extends Controller
 
     public function getStorebyLocation($id)
     {
-        $store_ids = DB::table("stores")->where("location_id", $id)->pluck("name", "id");
+        $store_ids = DB::table("stores")->where("location_id", $id)->where('is_active', 1)->pluck("name", "id");
         return json_encode($store_ids);
     }
 
     public function print($request, $Transaction)
     {
 
-         $trans = $request;
+        $trans = $request;
         $customer = Customer::where('mobile', $request->customer_number)->first();
         $trans['transactionID'] = $Transaction->transactionID;
 
