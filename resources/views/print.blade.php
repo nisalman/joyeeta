@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="row invoice-list">
                         <div class="col-md-12 text-center corporate-id">
-                            <img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}" height="95px" width="95px" alt="">
+                            <img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}" height="115px" width="115px" alt="">
                         </div>
                         <div class="col-lg-4 col-sm-4">
                             <h4>Billing From</h4>
