@@ -18,7 +18,6 @@ class LocationController extends Controller
      */
     public function index()
     {
-        \LogActivity::addToLog('Location Viewed');
         /* $loc=location::find(1)
              ->first();
          return $loc->admin->name;*/
@@ -33,7 +32,6 @@ class LocationController extends Controller
      */
     public function create()
     {
-        \LogActivity::addToLog('Location create clicked');
 
         $getAdmins = User::where('user_role_id', '2')
             ->select('id', 'name')
@@ -41,8 +39,6 @@ class LocationController extends Controller
         $getOperators = User::where('user_role_id', '3')
             ->select('id', 'name')
             ->get();
-
-        \LogActivity::addToLog('Location Creation clicked ');
 
         return view('location.create', compact('getAdmins', 'getOperators'));
     }
@@ -66,7 +62,6 @@ class LocationController extends Controller
         $Location->operator_id = $request->locationOperator;
 
         $Location->save();
-        \LogActivity::addToLog(' New Location Stored');
         return redirect()->back()->with('successMsg', 'User Successfully Saved');
 
 
@@ -126,7 +121,6 @@ class LocationController extends Controller
         $Location->operator_id = $request->locationOperator;
         $Location->save();
 
-        \LogActivity::addToLog('Location Updated');
         return redirect()->back()->with('successMsg', 'Location Successfully Updated');
     }
 

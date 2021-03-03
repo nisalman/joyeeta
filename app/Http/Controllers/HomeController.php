@@ -109,7 +109,6 @@ class HomeController extends Controller
 
     public function myTestAddToLog()
     {
-        \LogActivity::addToLog('My Testing Add To Log.');
         dd('log insert successfully.');
     }
 

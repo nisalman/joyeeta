@@ -21,38 +21,36 @@ class StoreController extends Controller
      */
     public function index()
     {
-        \LogActivity::addToLog('Store Viewed');
 
 
         if (Gate::allows('isSuperAdmin')) {
-             $location = location::all();
-            $stores= Store::all();
-             $userId= Store::find(1);
+            $location = location::all();
+            $stores = Store::all();
+            $userId = Store::find(1);
 
-            return view('store.view', compact('stores','userId'));
+            return view('store.view', compact('stores', 'userId'));
 
         } elseif (Gate::allows('isAdmin')) {
 
-            $location = location::where('admin_id',userId())
+            $location = location::where('admin_id', userId())
                 ->first();
 
 
-            if (empty($location))
-            {
-                Toastr()->error('You have no Stores','Create a store first');
+            if (empty($location)) {
+                Toastr()->error('You have no Stores', 'Create a store first');
                 return redirect()->back();
-            }else {
-                $stores= Store::where('location_id', $location->id)->get();
+            } else {
+                $stores = Store::where('location_id', $location->id)->get();
 
 
-                $userId= Store::find(1);
-                return view('store.view', compact('stores','userId'));
+                $userId = Store::find(1);
+                return view('store.view', compact('stores', 'userId'));
             }
 
 
         } elseif (Gate::allows('isOperator')) {
 
-                return 'not allowed';
+            return 'not allowed';
         }
 
 
@@ -65,8 +63,6 @@ class StoreController extends Controller
      */
     public function create()
     {
-        \LogActivity::addToLog('Store Create clicked');
-
 
         /*return Store::find(1)->location;
         return Store::find($locationData->id);*/
@@ -74,27 +70,24 @@ class StoreController extends Controller
         if (Gate::allows('isSuperAdmin')) {
 
 
-
-            $locationData = location::where('admin_id',userType())
+            $locationData = location::where('admin_id', userType())
                 ->first();
 
-            $allLocations= location::all();
+            $allLocations = location::all();
 
-            return view('store.create', compact('locationData','allLocations'));
+            return view('store.create', compact('locationData', 'allLocations'));
 
 
         } elseif (Gate::allows('isAdmin')) {
-            $allLocations= location::all();
-             $locationData = location::where('admin_id',userId())
+            $allLocations = location::all();
+            $locationData = location::where('admin_id', userId())
                 ->first();
-            if (empty($locationData))
-            {
-                Toastr()->error('You can not create store with creating location','No Location and store found');
+            if (empty($locationData)) {
+                Toastr()->error('You can not create store with creating location', 'No Location and store found');
                 return redirect()->back();
-            }else
-            {
-                $allLocations= location::where('admin_id',userId())->first();
-                return view('store.create', compact('locationData','allLocations'));
+            } else {
+                $allLocations = location::where('admin_id', userId())->first();
+                return view('store.create', compact('locationData', 'allLocations'));
 
             }
 //            $transactions = Transaction::where('location_id', $location->id)->orderBy('id', 'desc')->paginate(10);
@@ -108,13 +101,13 @@ class StoreController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreFormRequest $request)
     {
 
-         $location = location::where('admin_id',userId())
+        $location = location::where('admin_id', userId())
             ->first();
         $Store = new Store();
         $Store->name = $request->storeName;
@@ -129,14 +122,13 @@ class StoreController extends Controller
         $Store->user_id = userId();
 
         $Store->save();
-        \LogActivity::addToLog(' New Store created');
-        return redirect()->back()->with('successMsg','Store Successfully created');
+        return redirect()->back()->with('successMsg', 'Store Successfully created');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Store  $store
+     * @param \App\Store $store
      * @return \Illuminate\Http\Response
      */
     public function show(Store $store)
@@ -147,25 +139,25 @@ class StoreController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Store  $store
+     * @param \App\Store $store
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-         $locationData = location::where('admin_id',userId())
+        $locationData = location::where('admin_id', userId())
             ->first();
 
-        $allLocations= location::all();
-         $Store = Store::find($id);
-        return view( 'store.edit', compact('Store', 'allLocations','locationData'));
+        $allLocations = location::all();
+        $Store = Store::find($id);
+        return view('store.edit', compact('Store', 'allLocations', 'locationData'));
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Store  $store
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Store $store
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -184,10 +176,7 @@ class StoreController extends Controller
 
         $Store->save();
 
-        \LogActivity::addToLog(' New Store created');
-        return $this->index()->with('successMsg','Store Successfully Updated');
-
-
+        return $this->index()->with('successMsg', 'Store Successfully Updated');
 
     }
 
@@ -196,17 +185,15 @@ class StoreController extends Controller
         Store::where('id', $id)->update(['is_active' => 1]);
         return redirect()->back()->with('successMsg', 'Store Successfully reactivated');
     }
+
     public function deactivate($id)
     {
-        $transaction=Transaction::where('store_id', $id)->where('is_disburse', '0')->first();
-        if(isset($transaction))
-        {
+        $transaction = Transaction::where('store_id', $id)->where('is_disburse', '0')->first();
+        if (isset($transaction)) {
             Toastr()->error('Store can not be deactivated', 'This store has pending disbursements');
             return redirect()->back();
 
-        }
-        else
-        {
+        } else {
             Store::where('id', $id)->update(['is_active' => 0]);
             return redirect()->back()->with('successMsg', 'Store Successfully deactivated');
         }
@@ -217,7 +204,7 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Store  $store
+     * @param \App\Store $store
      * @return \Illuminate\Http\Response
      */
     public function destroy(Store $store)

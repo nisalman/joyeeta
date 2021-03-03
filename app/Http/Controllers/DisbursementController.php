@@ -24,8 +24,6 @@ class DisbursementController extends Controller
     public function index()
     {
         //return Disbursement::find(2)->store->name;
-        \LogActivity::addToLog('Disbursement Clicked');
-
         $disbursements = Disbursement::where('is_disbursement', '1')->get();
         return view('disbursement.view', compact('disbursements'));
 
@@ -105,7 +103,6 @@ class DisbursementController extends Controller
      */
     public function create()
     {
-        \LogActivity::addToLog('Disbursement Create Clicked');
 
         $locationData = location::where('admin_id', userType())
             ->first();
@@ -263,7 +260,6 @@ class DisbursementController extends Controller
             $Disbursement->to = $request->to;
             //return $Disbursement;
             $Disbursement->save();
-            \LogActivity::addToLog('Disbursement Stored');
             return redirect()->back()->with('successMsg', 'Disbursement Successfully Updated');
 
 
@@ -272,7 +268,6 @@ class DisbursementController extends Controller
         }
         //return $Disbursement;
         $Disbursement->save();
-        \LogActivity::addToLog('Disbursement Stored');
         return redirect()->back()->with('successMsg', 'Disbursement Successfully Made');
     }
 

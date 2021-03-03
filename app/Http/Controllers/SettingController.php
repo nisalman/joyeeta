@@ -16,7 +16,6 @@ class SettingController extends Controller
      */
     public function index()
     {
-        \LogActivity::addToLog('Setting Clicked');
 
         $settings=Setting::find(1)->first();
         return view('setting.view', compact('settings'));
@@ -74,7 +73,6 @@ class SettingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        \LogActivity::addToLog('Setting Update');
 
         $Setting= Setting::find($id);
         $Setting->vat = $request->vat;

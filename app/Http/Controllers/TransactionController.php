@@ -32,7 +32,6 @@ class TransactionController extends Controller
     {
 
         $this->vat_tax_calculation();
-        \LogActivity::addToLog('Transaction Viewed');
         if (Gate::allows('isSuperAdmin')) {
             $transactions = Transaction::orderBy('id', 'DESC')->paginate(10);
             $allLocation = location::all();
@@ -89,9 +88,6 @@ class TransactionController extends Controller
     public function create()
     {
         // return User::find(userId())->location;
-
-        \LogActivity::addToLog('Transaction Create Clicked');
-
 
         if (Gate::allows('isSuperAdmin')) {
             $locationData = location::where('admin_id', userId())->first();
@@ -267,8 +263,6 @@ class TransactionController extends Controller
         if ($request->pr) {
             return $this->print($request, $Transaction);
         }
-
-        \LogActivity::addToLog('Transaction created');
         return redirect()->back()->with('successMsg', 'Transaction Successfully created');
     }
 
