@@ -55,17 +55,18 @@
                             <td>#</td>
                             <td>{{$trans->transactionID}}</td>
                             <td >{{$trans->store_name}}</td>
-                            <td>{{$trans->finalPayable}}</td>
+                            <td>{{$trans->receiveable_payment}}</td>
                         </tr>
                         </tbody>
                     </table>
                     <div class="row justify-content-end">
                         <div class="col-lg-4 invoice-block ">
                             <ul class="unstyled amounts">
-                                <li><strong>Sub - Total amount :</strong> {{$trans->finalPayable}}</li>
+                                <li><strong>Sub - Total amount :</strong> {{$trans->receiveable_payment}}</li>
                                 <li><strong>Discount :</strong> 0%</li>
                                 <li><strong>VAT :</strong> 0%</li>
-                                <li><strong>Grand Total :</strong> {{$trans->finalPayable}}</li>
+                                <li><strong>{{$trans['card_charge_carrier']}} :</strong> {{$trans['card_charge']}}%</li>
+                                <li><strong>Grand Total :</strong> {{$trans->final_pay}}</li>
                             </ul>
                         </div>
                     </div>

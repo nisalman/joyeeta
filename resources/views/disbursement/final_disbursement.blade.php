@@ -8,7 +8,7 @@
             <div class="col-lg-6">
                 <section class="card">
                     <header class="card-header">
-                        Advanced Table
+                        Disbursements Confirmation
                     </header>
                     @include('layouts.partial.validationMessage')
 

@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Advanced Table
+                        All Disbursements
                     </header>
                     @include('layouts.partial.validationMessage')
 

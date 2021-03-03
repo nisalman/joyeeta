@@ -179,7 +179,7 @@ class TransactionController extends Controller
     {
 
         $storePrefix = location::find($request->storeLocation)->prefix;
-        $transactionID = $storePrefix . '-' . mt_rand(100000, 999999);
+        $transactionID = $storePrefix . '-' . mt_rand(1000000000, 9999999999);
 
         $getCustomerInfo = Customer::where('mobile', $request->customer_number)
             ->first();
@@ -241,7 +241,7 @@ class TransactionController extends Controller
             $final_payable=$request->receiveable_payment-$chargedAmount;
 
         }
-
+        $card=Card::find($request->cardType);
 
         //return $request;
         $Transaction = new Transaction();
@@ -252,7 +252,10 @@ class TransactionController extends Controller
         $Transaction->receiveable_payment = $request->receiveable_payment;
         $Transaction->final_payable = $final_payable;
         $Transaction->cardNo = $request->cardNo;
-        $Transaction->cardType = $request->cardType;
+        $Transaction->card_charge = $card->charge;
+        $Transaction->card_charge_carrier = $card->paid_person;
+        $Transaction->cardType = $card->paid_person;
+
         $Transaction->apprCode = $request->apprCode;
         $Transaction->dateTime = $request->dateTime;
         $Transaction->invoice_no = $request->storeLocation . $invoiceNO;
@@ -351,8 +354,9 @@ class TransactionController extends Controller
 
     public function print($request, $Transaction)
     {
-
+        //return $Transaction;
         $trans = $request;
+        $card=Card::find($trans->cardType);
         $customer = Customer::where('mobile', $request->customer_number)->first();
         $trans['transactionID'] = $Transaction->transactionID;
 
@@ -361,6 +365,18 @@ class TransactionController extends Controller
         $trans['date'] = Carbon::parse($trans->dateTime)->format('d-m-Y');
         $trans['time'] = Carbon::parse($trans->dateTime)->format('h:m');
         $trans['invoice_no'] = $Transaction->invoice_no;
+        $trans['final_pay'] = $Transaction->final_payable;
+
+        if ($card->paid_person==1)
+        {
+            $trans['card_charge'] = $card->charge;
+            $trans['card_charge_carrier']= 'Card charge added (+)';
+        }
+        else
+        {
+            $trans['card_charge'] = 0;
+            $trans['card_charge_carrier']= 'Card charge ';
+        }
 
         //return $trans;
         return view('print', compact('trans', 'customer'));

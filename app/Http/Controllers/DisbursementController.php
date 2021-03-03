@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Disbursement;
+use App\EkshopCommission;
 use App\Http\Requests\DisbursementFormRequest;
 use App\location;
 use App\Setting;
@@ -36,6 +37,7 @@ class DisbursementController extends Controller
             ->where('is_disburse', '0')
             ->where('is_cancelled', '0')
             ->get();
+
         $groupTrans = $transData->groupBy('batch_id');
 
         $trans = [];
@@ -50,7 +52,15 @@ class DisbursementController extends Controller
                 }
             }
 
+
+            $commission = Setting::find(1)->commission;
+            $ekshopComissionAmount = ($totalPay * $commission) / 100;
+            $finalPayable = $totalPay - $ekshopComissionAmount;
+
+
             $trans[$keys]['total_pay'] = $totalPay;
+            $trans[$keys]['ekshop_commission'] = $ekshopComissionAmount;
+            $trans[$keys]['final_pay'] = $finalPayable;
             $trans[$keys]['store_id'] = $tran->store_id;
             $trans[$keys]['transactionID'] = $tran->transactionID;
             $trans[$keys]['fromDate'] = $froupTran->min('created_at');
@@ -302,6 +312,12 @@ class DisbursementController extends Controller
         $Disbursement->save();
         Transaction::where('batch_id', $request->batchID)->update(['is_disburse' => '1']);
         Disbursement::where('disburse_id', $request->batchID)->update(['is_disbursement' => '1']);
+
+        $ekshopcommission =new EkshopCommission;
+        $ekshopcommission->batch_id=$request->batchID;
+        $ekshopcommission->amount=$request->commissionAmount;
+        $ekshopcommission->save();
+
         return $this->index()->with('successMsg', 'Batch Successfully disbursed');
     }
 

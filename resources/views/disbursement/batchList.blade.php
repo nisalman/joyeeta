@@ -6,7 +6,7 @@
             <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        Advanced Table
+                        Disbursement batch list
                     </header>
                     @include('layouts.partial.validationMessage')
 
@@ -19,8 +19,10 @@
                                     <th>Location</th>
                                     <th>Store Name</th>
                                     <th>Paid Amount</th>
-                                    <th>Payment Detail</th>
-                                    <th>Net Payable</th>
+                                    <th>ekShop Commission</th>
+                                    <th>Final payment</th>
+                                    <th>From - To</th>
+                                    {{--<th>Net Payable</th>--}}
                                     {{--                                    <th class="hidden-phone">Disbursement</th>--}}
                                     @can('isSuperAdmin')
                                         <th>Action</th>
@@ -37,8 +39,10 @@
                                         <td>{{ \App\Store::find($batchTran['store_id'])->location->name}}</td>
                                         <td>{{ \App\Store::find($batchTran['store_id'])->name}}</td>
                                         <td>{{$batchTran['total_pay']}}</td>
-                                        <td>{{Carbon\Carbon::parse($batchTran['fromDate'])->format('Y m d')}}</td>
-                                        <td>{{Carbon\Carbon::parse($batchTran['fromDate'])}}</td>
+                                        <td>{{$batchTran['ekshop_commission']}}</td>
+                                        <td>{{$batchTran['final_pay']}}</td>
+                                        <td>{{Carbon\Carbon::parse($batchTran['fromDate'])->format('d/m/y')}} - {{Carbon\Carbon::parse($batchTran['toDate'])->format('d/m/y')}}</td>
+                                        {{--<td>{{Carbon\Carbon::parse($batchTran['fromDate'])}}</td>--}}
                                         <td>
                                             {!! Form::open(['route' => 'disbursement.payment'], ['method'=>'post']) !!}
                                             <input type="hidden" name="batchID" value="{{$key}}">

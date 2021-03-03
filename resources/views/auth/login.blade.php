@@ -37,9 +37,9 @@
                 @csrf
                 <span class="login100-form-title p-b-26">
                         						<img src="{{asset('login_asset/images/icons/joyeeta_foundation.jpg')}}"
-                                                     height="80px" width="80px"/>
+                                                     height="100px" width="100px"/>
 					</span>
-                <span class="login100-form-title p-b-48" style="color: #ffff00">
+                <span class="login100-form-title p-b-48" style="color: #ffb700">
                     Joyeeta POS
 					</span>
 

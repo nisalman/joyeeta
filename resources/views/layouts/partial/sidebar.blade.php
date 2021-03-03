@@ -68,8 +68,18 @@
                     </ul>
                 </li>
                 <li class=" sub-menu">
+                    <a href="javascript:;" class=" {{ Request::is('admin/report*') ? 'active': '' }}">
+                        <i class="fa fa-file"></i>
+
+                        <span>Report</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{route('report.index')}}">ekShop Commission</a></li>
+                    </ul>
+                </li>
+                <li class=" sub-menu">
                     <a href="javascript:;" class=" {{ Request::is('admin/setting*') ? 'active': '' }}">
-                        <i class="fa fa-chain"></i>
+                        <i class="fa fa-cog"></i>
 
                         <span>Settings</span>
                     </a>

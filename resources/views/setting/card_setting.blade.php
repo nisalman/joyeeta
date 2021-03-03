@@ -25,7 +25,7 @@
                                     @foreach($cards as $card)
                                         <tr>
                                             <td>{{$card->name}}</td>
-                                            <td ><input  class="form-control" type="number" name="charge[{{$card->id}}]" value="{{$card->charge}}"></td>
+                                            <td ><input  class="form-control" type="text" name="charge[{{$card->id}}]" value="{{$card->charge}}"></td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -84,7 +84,7 @@
                                         <tr>
                                             <td>{{$card->id}}</td>
                                             <td>{{$card->name}}</td>
-                                            <td>{{$card->charge}}</td>
+                                            <td>{{$card->charge}}%</td>
                                             <td>
                                                 @if($card->paid_person==1)
                                                     Customer

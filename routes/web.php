@@ -32,6 +32,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'user_role_id'], function () {
     Route::resource('user','UserController');
     Route::resource('card','CardController');
     Route::resource('setting','SettingController');
+    Route::resource('report','ReportController');
 
     Route::get('auto','CustomerController@auto');
     Route::get('check','CustomerController@autocomplete');

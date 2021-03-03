@@ -91,7 +91,7 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Card Type</label>
                                 <div class="col-sm-4">
                                     <select class="form-control form-control-sm mb-2" name="cardType">
-                                        <option> Select Card</option>
+                                        <option value="0"> Select Card</option>
                                         @foreach($card as $cd)
                                             <option value="{{$cd->id}}"> {{$cd->name}} </option>
                                         @endforeach
