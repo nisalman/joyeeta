@@ -92,7 +92,7 @@ class TransactionController extends Controller
         if (Gate::allows('isSuperAdmin')) {
             $locationData = location::where('admin_id', userId())->first();
             $card = Card::all();
-            $shopData = Store::where('location_id', $locationData->id)->get();
+            $shopData = Store::all();
             $allLocation = location::all();
 
 

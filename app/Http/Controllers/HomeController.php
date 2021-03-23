@@ -37,20 +37,12 @@ class HomeController extends Controller
     public function superAdminHome()
     {
 
-
-
-//
-
-
-        // return view('admin.home', compact('adminCount','adminOperatorCount'));
-
-
         if (Gate::allows('isSuperAdmin')) {
 
             $adminCount = [];
             $adminCount['location'] = location::all()->count();
             $adminCount['store'] = Store::all()->count();
-            $adminCount['transaction'] = Transaction::all()->count();
+            $adminCount['transaction'] = Transaction::where('is_cancelled', '0')->count();
             $adminCount['disbursement'] = Disbursement::all()->count();
             return view('admin.home', compact('adminCount'));
 

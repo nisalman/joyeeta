@@ -48,6 +48,10 @@
                                     <td id="cardType">loading...</td>
                                 </tr>
                                 <tr class="gradeX" width="30%">
+                                    <td>Card Charge</td>
+                                    <td id="cardCharge">loading...</td>
+                                </tr>
+                                <tr class="gradeX" width="30%">
                                     <td>APPR Code</td>
                                     <td id="apprCode">loading...</td>
                                 </tr>

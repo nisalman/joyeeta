@@ -18,7 +18,7 @@
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Location</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control form-control-sm mb-2" name="storeLocation">
+                                        <select class="form-control form-control-sm mb-2" name="storeLocation" value="{{old('storeLocation')}}">
                                             <option value="0"> Select Location</option>
                                             @foreach($allLocation as $location)
                                                 <option value="{{$location->id}}"> {{$location->name}} </option>
@@ -39,7 +39,7 @@
                                     <label for="inputPassword3" class="col-sm-2 col-form-label">Location:</label>
                                     <div class="col-sm-4">
                                         <input type="hidden" name="storeLocation" value="{{$locationData->id}}"
-                                               id="storeLocation" class="form-control"/ >
+                                               id="storeLocation" class="form-control" />
                                         {{$locationData->name}}
                                     </div>
 
@@ -58,7 +58,7 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Customer
                                     Number</label>
                                 <div class="col-sm-4">
-                                    <input onfocusout="clearInput()" type="number" name="customer_number"
+                                    <input onfocusout="clearInput()" type="number" name="customer_number" value="{{old('customer_number')}}"
                                            id="customer_number" class="form-control"/>
                                     <div id="customerNumber">
                                     </div>
@@ -67,7 +67,7 @@
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Customer Name</label>
                                 <div class="col-sm-4">
                                     <input type="text" id='customerName' name="customerName" class="form-control"
-                                           value="">
+                                           value="{{old('customerName')}}">
                                 </div>
                             </div>
 
@@ -75,13 +75,13 @@
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Customer address</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="customerAddress" value=""
+                                    <input type="text" class="form-control" name="customerAddress" value="{{old('customerAddress')}}"
                                            id="customerAddress">
                                 </div>
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Payable
                                     Amount</label>
                                 <div class="col-sm-4">
-                                    <input type="number" class="form-control" name="receiveable_payment">
+                                    <input type="number" class="form-control" name="receiveable_payment" value="{{old('receiveable_payment')}}">
                                 </div>
                             </div>
 
@@ -99,18 +99,18 @@
                                 </div>
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">Card No</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="cardNo">
+                                    <input type="text" class="form-control" name="cardNo" value="{{old('cardNo')}}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputPassword3" class="col-sm-2 col-form-label">APPR Code</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" name="apprCode">
+                                    <input type="text" class="form-control" name="apprCode" value="{{old('apprCode')}}">
                                 </div>
                                 <label for="inputPassword3" class="col-sm-2 col-form-label" id="myDate">Date Time
                                 </label>
                                 <div class="col-sm-4">
-                                    <input type="datetime-local" class="form-control" name="dateTime">
+                                    <input type="datetime-local" class="form-control" name="dateTime" value="{{old('dateTime')}}">
                                 </div>
                             </div>
 

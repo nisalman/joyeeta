@@ -105,6 +105,7 @@
                                 $("#paidAmount").text(data.final_payable);
                                 $("#cardNumber").text(data.cardNo);
                                 $("#cardType").text(data.cardType);
+                                $("#cardCharge").text(data.card_charge + '%');
                                 $("#apprCode").text(data.apprCode);
                                 $("#td").text(data.dateTime);
 

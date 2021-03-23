@@ -31,7 +31,7 @@ class TransactionFormRequest extends FormRequest
     {
         return [
             'storeLocation' => 'required|not_in:0',
-            'store_id' => 'required|not_in:0',
+            'store_id' => 'required|not_in:Select Store',
             'customer_number' => 'required',
             'customerName' => 'required',
             'customerAddress' => 'required',
@@ -48,11 +48,13 @@ class TransactionFormRequest extends FormRequest
         return [
             'storeLocation.required' => 'Select Location',
             'store_id.required' => 'Select Store',
+            'store_id.not_in' => 'Please select a store',
             'customer_number.required' => 'Insert Customer Number',
             'customerName.required' => 'Give a name of Customer',
             'customerAddress.required' => 'Insert Customer address.',
             'contactName.required' => 'Insert customer name',
             'cardType.required' => 'Select card type',
+            'cardType.not_in' => 'Select card type',
             'receiveable_payment.required' => 'Insert payment amount',
             'cardNo.required' => 'Insert card no',
             'apprCode.required' => 'Insert appr code',
